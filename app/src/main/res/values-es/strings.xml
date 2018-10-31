@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don’t have an account?</string>
+    <string name="ask_your_manager_to_create_an_account">Ask your manager to send you an  invite link to Create an Account</string>
+    <string name="club_namespace">Club Namespace</string>
+    <string name="field_cannot_be_empty">The field %s can\'t be empty</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="invalid_namespace">Invalid Namespace</string>
+    <string name="password_should_be_6_characters">La contraseña debe tener al menos 6 caracteres.</string>
+    <string name="password">Contraseña</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="send">ENVIAR</string>
+    <string name="recovery_password">Restablecer Contraseña</string>
+</resources>

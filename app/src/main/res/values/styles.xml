@@ -1,11 +1,19 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="RocketJourneyTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:colorBackground">@color/gray_2a</item>
+        <item name="android:textColorPrimary">@color/white_ff</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorAccent">@color/gray_a1</item>
+        <item name="android:fontFamily">@font/montserratregular</item>
+    </style>
+
+    <style name="CircularProgressGrayA5" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/gray_a5</item>
+    </style>
+
+    <style name="CircularProgressBlack1a" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/black_1a</item>
     </style>
 
 </resources>

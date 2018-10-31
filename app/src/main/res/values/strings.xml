@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">ControlCenterRocketJourney</string>
+    <string name="app_name" translatable="false">ControlCenterRocketJourney</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don’t have an account?</string>
+    <string name="ask_your_manager_to_create_an_account">Ask your manager to send you an\n invite link to Create an Account</string>
+    <string name="club_namespace">Club Namespace</string>
+    <string name="field_cannot_be_empty">The field %s can\'t be empty</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="invalid_namespace">Invalid Namespace</string>
+    <string name="password_should_be_6_characters">Password should be 6 characters minimum</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="send">SEND</string>
+    <string name="recovery_password">Reset Password</string>
 </resources>
