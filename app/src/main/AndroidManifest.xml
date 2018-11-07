@@ -17,9 +17,40 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.FirstScreenActivity" />
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".login.ForgotPasswordActivity"></activity>
+        <activity
+            android:name=".login.FirstScreenActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+
+            <intent-filter>
+                <data android:scheme="rjcontrolcenter" android:host="open" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- Branch init -->
+        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_gly8pHq32a1jDUpEpbQx4gimFrcmx9RU" />
+        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_jeFZjSuZ3pWlDVgDfkLFLnheDFhetZVs" />
+
+        <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
+        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+
+        <!-- Branch install referrer tracking -->
+        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

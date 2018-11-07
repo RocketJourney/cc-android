@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     lateinit var buttonLogin: Button
-    var isLogin = false
+    private var isLogin = false
 
     override fun onClick(v: View?) {
 
@@ -72,13 +72,13 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun cleanViews() {
+    private fun cleanViews() {
         textInputLayoutClubNamespace.error = ""
         textInputLayoutEmail.error = ""
         textInputLayoutPassword.error = ""
     }
 
-    fun doLogin() {
+    private fun doLogin() {
 
         val clubNamespace = editTextClubNamespace.text.toString()
         val email = editTextEmail.text.toString()
@@ -104,7 +104,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }, 3000)
     }
 
-    fun doSignUp() {
+    private fun doSignUp() {
 
         val clubNamespace = editTextClubNamespace.text.toString()
         val email = editTextEmail.text.toString()
