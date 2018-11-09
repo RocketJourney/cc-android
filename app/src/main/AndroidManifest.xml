@@ -20,26 +20,36 @@
         <activity
             android:name=".login.FirstScreenActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-
+            android:screenOrientation="portrait">
             <intent-filter>
-                <data android:scheme="rjcontrolcenter" android:host="open" />
+                <data
+                    android:host="open"
+                    android:scheme="rjcontrolcenter" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-
         </activity>
 
         <!-- Branch init -->
-        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_gly8pHq32a1jDUpEpbQx4gimFrcmx9RU" />
-        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_jeFZjSuZ3pWlDVgDfkLFLnheDFhetZVs" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey"
+            android:value="key_live_gly8pHq32a1jDUpEpbQx4gimFrcmx9RU" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey.test"
+            android:value="key_test_jeFZjSuZ3pWlDVgDfkLFLnheDFhetZVs" />
 
         <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+        <meta-data
+            android:name="io.branch.sdk.TestMode"
+            android:value="false" />
 
         <!-- Branch install referrer tracking -->
-        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+        <receiver
+            android:name="io.branch.referral.InstallListener"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -51,6 +61,10 @@
         <activity
             android:name=".login.ForgotPasswordActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.ConfirmEmailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".login.CreateAccountActivity"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black_1a">#1a1a1a</color>
+    <color name="black_21">#212121</color>
 
     <color name="white_ff">#ffffff</color>
 
@@ -13,4 +14,5 @@
     <color name="gray_ea">#eaeaea</color>
     <color name="green_59">#59b858</color>
     <color name="gray_b9">#b9b9b9</color>
+    <color name="gray_33">#333333</color>
 </resources>

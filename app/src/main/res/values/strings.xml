@@ -14,4 +14,8 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="send">SEND</string>
     <string name="recovery_password">Reset Password</string>
+    <string name="next">Next</string>
+    <string name="name">Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="create">Create</string>
 </resources>

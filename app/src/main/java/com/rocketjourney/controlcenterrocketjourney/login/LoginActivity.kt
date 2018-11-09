@@ -73,23 +73,22 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun cleanViews() {
-        textInputLayoutClubNamespace.error = ""
         textInputLayoutEmail.error = ""
         textInputLayoutPassword.error = ""
     }
 
     private fun doLogin() {
 
-        val clubNamespace = editTextClubNamespace.text.toString()
         val email = editTextEmail.text.toString()
-
-        if (clubNamespace.isEmpty()) {
-            textInputLayoutClubNamespace.error = getString(R.string.invalid_namespace)
-            return
-        }
+        val password = editTextClubPassword.text.toString()
 
         if (!Utils.isValidEmail(email)) {
             textInputLayoutEmail.error = getString(R.string.invalid_email)
+            return
+        }
+
+        if (password.length < 6) {
+            textInputLayoutEmail.error = getString(R.string.password_should_be_6_characters)
             return
         }
 
@@ -106,14 +105,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun doSignUp() {
 
-        val clubNamespace = editTextClubNamespace.text.toString()
         val email = editTextEmail.text.toString()
         val password = editTextClubPassword.text.toString()
-
-        if (clubNamespace.isEmpty()) {
-            textInputLayoutClubNamespace.error = getString(R.string.invalid_namespace)
-            return
-        }
 
         if (!Utils.isValidEmail(email)) {
             textInputLayoutEmail.error = getString(R.string.invalid_email)
