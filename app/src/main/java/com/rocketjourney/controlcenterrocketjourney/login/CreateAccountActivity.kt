@@ -25,7 +25,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
 
         componentToolbar.textViewToolbarTitle.text = "Create account" //ward
         componentToolbar.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_yellow_24dp)
-        componentToolbar.toolbar.setOnClickListener { finish() }
+        componentToolbar.toolbar.setNavigationOnClickListener { finish() }
     }
 
     override fun onClick(v: View?) {
@@ -51,12 +51,12 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         if (firstName.isEmpty()) {
-            Utils.showShortToast(getString(R.string.field_cannot_be_empty, "first name")) //ward
+            Utils.showShortToast(getString(R.string.field_cannot_be_empty, "First name")) //ward
             return
         }
 
         if (lastName.isEmpty()) {
-            Utils.showShortToast(getString(R.string.field_cannot_be_empty, "last name")) //ward
+            Utils.showShortToast(getString(R.string.field_cannot_be_empty, "Last name")) //ward
             return
         }
 
@@ -77,6 +77,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         buttonCreate = menuItem?.actionView as Button
 
         buttonCreate.setTextColor(getColor(R.color.yellow_ff))
+        buttonCreate.setText(R.string.create)
         buttonCreate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
         buttonCreate.typeface = Utils.montserratBlack()
         buttonCreate.setBackgroundColor(Color.TRANSPARENT)

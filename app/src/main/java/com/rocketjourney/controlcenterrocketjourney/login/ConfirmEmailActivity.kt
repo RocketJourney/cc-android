@@ -38,7 +38,14 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun sendRequest(){
 
-        //TODO()
+        val email = editTextEmail.text.toString()
+
+        if(!Utils.isValidEmail(email)){
+            Utils.showShortToast(getString(R.string.invalid_email))
+            return
+        }
+
+        Utils.showShortToast("ready to go!") //ward
 
     }
 
@@ -50,6 +57,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
         buttonNext = menuItem?.actionView as Button
 
         buttonNext.setTextColor(getColor(R.color.yellow_ff))
+        buttonNext.setText(R.string.next)
         buttonNext.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
         buttonNext.typeface = Utils.montserratBlack()
         buttonNext.setBackgroundColor(Color.TRANSPARENT)

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import com.rocketjourney.controlcenterrocketjourney.R
 import io.branch.referral.Branch
 import kotlinx.android.synthetic.main.activity_first_screen.*
@@ -42,5 +43,15 @@ class FirstScreenActivity : AppCompatActivity() {
 
     public override fun onNewIntent(intent: Intent) {
         this.intent = intent
+    }
+
+    fun confirmEmail(view: View) {
+        val intent = Intent(this, ConfirmEmailActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun createAccount(view: View) {
+        val intent = Intent(this, CreateAccountActivity::class.java)
+        startActivity(intent)
     }
 }
