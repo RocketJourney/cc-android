@@ -8,9 +8,14 @@ import android.view.Menu
 import android.view.View
 import android.widget.Button
 import com.rocketjourney.controlcenterrocketjourney.R
+import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
+import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import kotlinx.android.synthetic.main.activity_confirm_email.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -30,22 +35,67 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
 
-        if(v == buttonNext){
+        if (v == buttonNext) {
             sendRequest()
         }
 
     }
 
-    private fun sendRequest(){
+    private fun sendRequest() {
 
         val email = editTextEmail.text.toString()
 
-        if(!Utils.isValidEmail(email)){
+        if (!Utils.isValidEmail(email)) {
             Utils.showShortToast(getString(R.string.invalid_email))
             return
         }
 
-        Utils.showShortToast("ready to go!") //ward
+        //ward inicializar este user
+        val user = ""
+
+        RJRetrofit.getInstance().create(LoginInterface::class.java).validateEmail(user, email).enqueue(object : Callback<Void> {
+
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+
+                when (response.code()) {//ward completar los responses
+
+                    /**
+                     * Valid link, user not registered
+                     */
+                    200 -> {
+
+                    }
+
+                    /**
+                     * Valid link, user registered and linked with club
+                     */
+                    201 -> {
+
+                    }
+
+                    /**
+                     * Valid link, user registered and already linked with club
+                     */
+                    304 -> {
+
+                    }
+
+                    /**
+                     * Linke has expired
+                     */
+                    404 -> {
+
+                    }
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Utils.showShortToast("Error en la conexion(?)") //ward
+            }
+
+        })
 
     }
 

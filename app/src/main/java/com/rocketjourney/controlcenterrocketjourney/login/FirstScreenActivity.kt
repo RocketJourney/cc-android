@@ -24,27 +24,6 @@ class FirstScreenActivity : AppCompatActivity() {
         }
     }
 
-    public override fun onStart() {
-        super.onStart()
-        val branch = Branch.getInstance()
-
-        // Branch init
-        branch.initSession({ referringParams, error ->
-            if (error == null) {
-                // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
-                // params will be empty if no data found
-                // ... insert custom logic here ...
-                Log.i("BRANCH SDK", referringParams.toString())
-            } else {
-                Log.i("BRANCH SDK", error.message)
-            }
-        }, this.intent.data, this)
-    }
-
-    public override fun onNewIntent(intent: Intent) {
-        this.intent = intent
-    }
-
     fun confirmEmail(view: View) {
         val intent = Intent(this, ConfirmEmailActivity::class.java)
         startActivity(intent)

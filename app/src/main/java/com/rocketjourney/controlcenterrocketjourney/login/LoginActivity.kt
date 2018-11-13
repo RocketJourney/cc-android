@@ -12,9 +12,16 @@ import android.view.View
 import android.widget.Button
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.R.drawable.ic_close_yellow
+import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
+import com.rocketjourney.controlcenterrocketjourney.login.requests.LoginRequest
+import com.rocketjourney.controlcenterrocketjourney.login.responses.LoginResponse
+import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -92,15 +99,25 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        buttonLogin.alpha = 0.5f
-        buttonLogin.isEnabled = false
+        val request = LoginRequest(email, password)
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        RJRetrofit.getInstance().create(LoginInterface::class.java).loginRequest(request).enqueue(object : Callback<LoginResponse> {
 
-            buttonLogin.alpha = 1f
-            buttonLogin.isEnabled = true
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
 
-        }, 3000)
+                if (response.isSuccessful) {
+                    Utils.showShortToast("Cuenta creada!") //ward
+                } else {
+                    Utils.showShortToast("Algo salio mal :(") //ward
+                }
+
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                Utils.showShortToast("Error en la conexion(?)") //ward
+            }
+
+        })
     }
 
     private fun doSignUp() {

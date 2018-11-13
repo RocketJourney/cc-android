@@ -8,9 +8,17 @@ import android.view.Menu
 import android.view.View
 import android.widget.Button
 import com.rocketjourney.controlcenterrocketjourney.R
+import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
+import com.rocketjourney.controlcenterrocketjourney.login.requests.SignUpRequest
+import com.rocketjourney.controlcenterrocketjourney.login.responses.SignUpResponse
+import com.rocketjourney.controlcenterrocketjourney.login.objects.User
+import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import kotlinx.android.synthetic.main.activity_create_account.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -65,8 +73,28 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        //TODO
-        Utils.showShortToast("ready to go!")//ward
+        val user = User(email, firstName, lastName, password)
+
+        val request = SignUpRequest(user, "")//ward agregar la invitacion
+
+        RJRetrofit.getInstance().create(LoginInterface::class.java).signUpRequest(request).enqueue(object : Callback<SignUpResponse> {
+
+            override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
+
+                if (response.isSuccessful) {
+                    Utils.showShortToast("Cuenta creada!") //ward
+                } else {
+                    Utils.showShortToast("Algo salio mal :(") //ward
+                }
+
+            }
+
+            override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
+                Utils.showShortToast("Error en la conexion(?)") //ward
+            }
+
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
