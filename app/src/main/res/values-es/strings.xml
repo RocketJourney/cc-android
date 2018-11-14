@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="already_have_an_account">Already have an account?</string>
-    <string name="login">Login</string>
-    <string name="don_t_have_an_account">Don’t have an account?</string>
-    <string name="ask_your_manager_to_create_an_account">Ask your manager to send you an  invite link to Create an Account</string>
+    <string name="already_have_an_account">¿Ya tienes cuenta</string>
+    <string name="login">Iniciar Sesión</string>
+    <string name="don_t_have_an_account">¿No tienes cuenta?</string>
+    <string name="ask_your_manager_to_create_an_account">Pídele al gerente de tu gym un link de invitación para crear una cuenta.</string>
     <string name="club_namespace">Club Namespace</string>
     <string name="field_cannot_be_empty">The field %s can\'t be empty</string>
     <string name="invalid_email">Invalid Email</string>
@@ -15,6 +15,15 @@
     <string name="recovery_password">Restablecer Contraseña</string>
     <string name="next">Siguiente</string>
     <string name="name">Nombre</string>
-    <string name="last_name">Last Name</string>
+    <string name="last_name">Apellido</string>
     <string name="create">Crear</string>
+    <string name="create_account">Crear Cuenta</string>
+    <string name="enter">Entrar</string>
+    <string name="reset_password">Restablecer Contraseña</string>
+    <string name="choose_club">Elige un Club</string>
+    <string name="email_and_password_dont_match">Email &amp; contraseña no coinciden</string>
+    <string name="please_try_again">Por favor reintenta.</string>
+    <string name="try_again">Reintentar</string>
+    <string name="email_not_registered">%s no está registrado</string>
+    <string name="try_again_or_sign_up">Por favor reintenta o registra una cuenta.</string>
 </resources>

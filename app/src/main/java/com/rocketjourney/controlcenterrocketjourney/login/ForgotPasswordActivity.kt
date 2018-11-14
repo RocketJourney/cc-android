@@ -1,24 +1,25 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
-import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.Menu
+import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Button
 import com.rocketjourney.controlcenterrocketjourney.R
+import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
+import com.rocketjourney.controlcenterrocketjourney.login.requests.ResetPasswordRequest
+import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
 
-    lateinit var buttonSend: Button
-
     override fun onClick(v: View?) {
 
-        if (v == buttonSend) {
+        if (v == buttonResetPassword) {
             sendPasswordReset()
         }
 
@@ -35,6 +36,8 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
 
         componentToolbar.toolbar.navigationIcon = getDrawable(R.drawable.ic_close_yellow)
         componentToolbar.toolbar.setNavigationOnClickListener { finish() }
+
+        buttonResetPassword.setOnClickListener(this)
 
         cleanViews()
     }
@@ -54,23 +57,36 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        Utils.showShortToast("Todo en orden :+1:")
-    }
+        val request = ResetPasswordRequest()
+        request.email = email
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        RJRetrofit.getInstance().create(LoginInterface::class.java).resetPasswordRequest(request).enqueue(object : Callback<Void> {
 
-        menuInflater.inflate(R.menu.menu_login, menu)
-        var menuItem = menu?.findItem(R.id.menuLogin)
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
 
-        buttonSend = menuItem?.actionView as Button
+                when (response.code()) {
 
-        buttonSend.text = getString(R.string.send)
-        buttonSend.setTextColor(getColor(R.color.yellow_ff))
-        buttonSend.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
-        buttonSend.typeface = Utils.montserratBlack()
-        buttonSend.setBackgroundColor(Color.TRANSPARENT)
-        buttonSend.setOnClickListener(this)
+                    201 -> {
 
-        return true
+                    }
+
+                    404 -> {
+
+                        val emailNotRegisteredDialog = AlertDialog.Builder(applicationContext, R.style.StyleAlertDialog)
+                        emailNotRegisteredDialog.setTitle(getString(R.string.email_not_registered, email))
+                        emailNotRegisteredDialog.setMessage(getString(R.string.try_again_or_sign_up))
+                        emailNotRegisteredDialog.setPositiveButton(getString(R.string.ok), null)
+
+                    }
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
     }
 }

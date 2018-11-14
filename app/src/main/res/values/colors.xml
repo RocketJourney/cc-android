@@ -9,10 +9,12 @@
     <color name="gray_2a">#2a2a2a</color>
     <color name="gray_b3">#b3b3b3</color>
     <color name="gray_a5">#a5a5a5</color>
-
-    <color name="yellow_ff">#ffcc00</color>
+    <color name="gray_be">#bebebe</color>
     <color name="gray_ea">#eaeaea</color>
-    <color name="green_59">#59b858</color>
     <color name="gray_b9">#b9b9b9</color>
     <color name="gray_33">#333333</color>
+
+    <color name="yellow_ff">#ffcc00</color>
+
+    <color name="green_59">#59b858</color>
 </resources>

@@ -16,4 +16,10 @@
         <item name="colorAccent">@color/black_1a</item>
     </style>
 
+    <style name="StyleAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">@color/yellow_ff</item>
+        <item name="android:textColor">@color/white_ff</item>
+        <item name="android:textColorPrimary">@color/gray_be</item>
+        <item name="android:fontFamily">font/montserratregular.ttf</item>
+    </style>
 </resources>

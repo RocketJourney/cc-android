@@ -31,7 +31,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(componentToolbar.toolbar)
         Utils.hideToolbarTitle(supportActionBar)
 
-        componentToolbar.textViewToolbarTitle.text = "Create account" //ward
+        componentToolbar.textViewToolbarTitle.text = getString(R.string.create_account)
         componentToolbar.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_yellow_24dp)
         componentToolbar.toolbar.setNavigationOnClickListener { finish() }
     }

@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">ControlCenterRocketJourney</string>
     <string name="already_have_an_account">Already have an account?</string>
-    <string name="login">Login</string>
-    <string name="don_t_have_an_account">Don’t have an account?</string>
-    <string name="ask_your_manager_to_create_an_account">Ask your manager to send you an\n invite link to Create an Account</string>
+    <string name="login">Log In</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="ask_your_manager_to_create_an_account">Ask the gym manager to send you an invite link to create an account.</string>
     <string name="club_namespace">Club Namespace</string>
     <string name="field_cannot_be_empty">The field %s can\'t be empty</string>
     <string name="invalid_email">Invalid Email</string>
@@ -18,4 +18,14 @@
     <string name="name">Name</string>
     <string name="last_name">Last Name</string>
     <string name="create">Create</string>
+    <string name="create_account">Create Account</string>
+    <string name="enter">Enter</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="choose_club">Choose Club</string>
+    <string name="email_and_password_dont_match">Email and password do not match</string>
+    <string name="please_try_again">Please try again.</string>
+    <string name="try_again">Try Again</string>
+    <string name="email_not_registered">%s not registered</string>
+    <string name="try_again_or_sign_up">Please try again or sign up for an account.</string>
+    <string name="ok">Ok</string>
 </resources>

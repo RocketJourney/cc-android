@@ -28,7 +28,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(componentToolbar.toolbar)
         Utils.hideToolbarTitle(supportActionBar)
 
-        componentToolbar.textViewToolbarTitle.text = "Join Sports World" //ward
+        componentToolbar.textViewToolbarTitle.text = getString(R.string.create_account)
         componentToolbar.toolbar.setNavigationIcon(R.drawable.ic_close_yellow)
         componentToolbar.toolbar.setNavigationOnClickListener { finish() }
     }

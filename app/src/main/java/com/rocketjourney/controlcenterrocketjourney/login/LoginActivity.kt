@@ -1,10 +1,12 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Menu
@@ -105,10 +107,26 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
 
-                if (response.isSuccessful) {
-                    Utils.showShortToast("Cuenta creada!") //ward
-                } else {
-                    Utils.showShortToast("Algo salio mal :(") //ward
+                when (response.code()) {
+
+                    200 -> {
+
+                    }
+
+                    422 -> {
+                        val invalidCredentialsDialog = AlertDialog.Builder(applicationContext, R.style.StyleAlertDialog)
+                        invalidCredentialsDialog.setTitle(getString(R.string.email_and_password_dont_match))
+                        invalidCredentialsDialog.setMessage(getString(R.string.please_try_again))
+                        invalidCredentialsDialog.setPositiveButton(getString(R.string.try_again), object : DialogInterface.OnClickListener {
+
+                            override fun onClick(dialog: DialogInterface?, which: Int) {
+                                //TODO
+                                //ward
+                            }
+
+                        })
+                    }
+
                 }
 
             }
@@ -160,7 +178,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         buttonLogin = menuItem?.actionView as Button
 
-        buttonLogin.text = getString(R.string.login)
+        buttonLogin.text = getString(R.string.enter)
         buttonLogin.setTextColor(getColor(R.color.yellow_ff))
         buttonLogin.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
         buttonLogin.typeface = Utils.montserratBlack()
