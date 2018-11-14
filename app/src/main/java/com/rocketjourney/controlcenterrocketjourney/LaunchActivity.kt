@@ -44,7 +44,9 @@ class LaunchActivity : AppCompatActivity() {
                 finish()
             } else {
                 //ward leer que es lo que viene aqui
-                Log.i("BRANCH SDK", error.message)
+                intent = Intent(applicationContext, FirstScreenActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }, this.intent.data, this)
     }
