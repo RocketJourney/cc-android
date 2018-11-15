@@ -15,6 +15,7 @@ public class RocketJourneyApp extends Application {
         context = getApplicationContext();
 
         // Initialize the Branch object
+        Branch.enableLogging();
         Branch.getAutoInstance(this);
     }
 }
