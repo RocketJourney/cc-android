@@ -125,6 +125,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                             }
 
                         })
+                        invalidCredentialsDialog.show()
                     }
 
                 }

@@ -24,13 +24,4 @@ class FirstScreenActivity : AppCompatActivity() {
         }
     }
 
-    fun confirmEmail(view: View) {
-        val intent = Intent(this, ConfirmEmailActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun createAccount(view: View) {
-        val intent = Intent(this, CreateAccountActivity::class.java)
-        startActivity(intent)
-    }
 }

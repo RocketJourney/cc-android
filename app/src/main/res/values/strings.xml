@@ -30,4 +30,6 @@
     <string name="ok">Ok</string>
     <string name="email_is_already_registered">Email is already registered</string>
     <string name="email_already_linked_to_this_club">There is already an account with this email linked to this club.</string>
+    <string name="link_expired">Link Expired</string>
+    <string name="ask_your_gym_for_another_link">Ask the gym manager to send you another invite link.</string>
 </resources>
