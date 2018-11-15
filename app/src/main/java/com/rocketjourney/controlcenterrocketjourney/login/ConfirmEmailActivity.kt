@@ -1,8 +1,10 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
+import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.util.TypedValue
 import android.view.Menu
 import android.view.View
@@ -42,6 +44,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun sendRequest() {
+        buttonNext.isEnabled = false
 
         val email = editTextEmail.text.toString()
 
@@ -56,6 +59,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
         RJRetrofit.getInstance().create(LoginInterface::class.java).validateEmail(user, email).enqueue(object : Callback<Void> {
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                buttonNext.isEnabled = true
 
                 when (response.code()) {//ward completar los responses
 
@@ -63,6 +67,9 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                      * Valid link, user not registered
                      */
                     200 -> {
+
+                        val intent = Intent(application, CreateAccountActivity::class.java)
+                        startActivity(intent)
 
                     }
 
@@ -78,10 +85,21 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                      */
                     304 -> {
 
+                        val emailAlreadyRegistered = AlertDialog.Builder(applicationContext, R.style.StyleAlertDialog)
+                        emailAlreadyRegistered.setTitle(getString(R.string.email_is_already_registered))
+                        emailAlreadyRegistered.setMessage(getString(R.string.email_already_linked_to_this_club))
+
                     }
 
                     /**
-                     * Linke has expired
+                     * Link has expired
+                     */
+                    400 -> {
+
+                    }
+
+                    /**
+                     * Link has expired
                      */
                     404 -> {
 
@@ -92,6 +110,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                buttonNext.isEnabled = true
                 Utils.showShortToast("Error en la conexion(?)") //ward
             }
 

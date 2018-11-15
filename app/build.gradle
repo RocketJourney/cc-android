@@ -37,7 +37,7 @@ android {
             applicationIdSuffix ".development"
             versionNameSuffix "-development"
 
-            buildConfigField "String", "ApiUrl", "\"https://staging.rocketjourney.com/api/v1/\""
+            buildConfigField "String", "ApiUrl", "\"https://api.testin.space/api/v2/\""
         }
     }
 }

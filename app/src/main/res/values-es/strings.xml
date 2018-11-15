@@ -26,4 +26,6 @@
     <string name="try_again">Reintentar</string>
     <string name="email_not_registered">%s no está registrado</string>
     <string name="try_again_or_sign_up">Por favor reintenta o registra una cuenta.</string>
+    <string name="email_is_already_registered">Email ya está registrado</string>
+    <string name="email_already_linked_to_this_club">Ya existe una cuenta con este email ligada a este club.</string>
 </resources>

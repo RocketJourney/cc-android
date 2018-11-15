@@ -28,4 +28,6 @@
     <string name="email_not_registered">%s not registered</string>
     <string name="try_again_or_sign_up">Please try again or sign up for an account.</string>
     <string name="ok">Ok</string>
+    <string name="email_is_already_registered">Email is already registered</string>
+    <string name="email_already_linked_to_this_club">There is already an account with this email linked to this club.</string>
 </resources>
