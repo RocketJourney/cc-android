@@ -15,7 +15,10 @@ public class RJRetrofit {
             instance = new Retrofit.Builder()
                     .baseUrl(BuildConfig.ApiUrl)
                     .addConverterFactory(GsonConverterFactory.create(
-                            new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
+                            new GsonBuilder().
+                                    excludeFieldsWithoutExposeAnnotation()
+                                    .serializeNulls()
+                                    .create()))
                     .build();
         }
         return instance;

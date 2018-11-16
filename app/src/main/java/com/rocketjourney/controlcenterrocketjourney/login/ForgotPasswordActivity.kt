@@ -60,19 +60,26 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
         val request = ResetPasswordRequest()
         request.email = email
 
+        buttonResetPassword.isEnabled = false
+
         RJRetrofit.getInstance().create(LoginInterface::class.java).resetPasswordRequest(request).enqueue(object : Callback<Void> {
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
+
+                buttonResetPassword.isEnabled = true
 
                 when (response.code()) {
 
                     201 -> {
 
+                        Utils.showLongToast("email sent")//ward
+                        finish()
+
                     }
 
                     404 -> {
 
-                        val emailNotRegisteredDialog = AlertDialog.Builder(applicationContext, R.style.StyleAlertDialog)
+                        val emailNotRegisteredDialog = AlertDialog.Builder(this@ForgotPasswordActivity, R.style.StyleAlertDialog)
                         emailNotRegisteredDialog.setTitle(getString(R.string.email_not_registered, email))
                         emailNotRegisteredDialog.setMessage(getString(R.string.try_again_or_sign_up))
                         emailNotRegisteredDialog.setPositiveButton(getString(R.string.ok), null)
@@ -85,6 +92,8 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                buttonResetPassword.isEnabled = true
+                //ward
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 

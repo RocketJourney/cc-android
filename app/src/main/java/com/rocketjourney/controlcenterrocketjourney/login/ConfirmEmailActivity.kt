@@ -1,5 +1,6 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.View
 import android.widget.Button
+import com.rocketjourney.controlcenterrocketjourney.LaunchActivity
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
@@ -22,7 +24,13 @@ import retrofit2.Response
 
 class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
-    lateinit var buttonNext: Button
+    companion object {
+        const val ACTIVITY_FOR_RESULT_LOG_IN = 101
+    }
+
+    private lateinit var invitationCode: String
+
+    private lateinit var buttonNext: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +42,9 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
         componentToolbar.textViewToolbarTitle.text = getString(R.string.create_account)
         componentToolbar.toolbar.setNavigationIcon(R.drawable.ic_close_yellow)
         componentToolbar.toolbar.setNavigationOnClickListener { finish() }
+
+        invitationCode = intent.getStringExtra(LaunchActivity.EXTRA_INVITATION_CODE)
+
     }
 
     override fun onClick(v: View?) {
@@ -45,7 +56,6 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun sendRequest() {
-        buttonNext.isEnabled = false
 
         val email = editTextEmail.text.toString()
 
@@ -54,15 +64,14 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        //ward inicializar este user
-        val user = ""
+        buttonNext.isEnabled = false
 
-        RJRetrofit.getInstance().create(LoginInterface::class.java).validateEmail(user, email).enqueue(object : Callback<Void> {
+        RJRetrofit.getInstance().create(LoginInterface::class.java).validateEmail(invitationCode, email).enqueue(object : Callback<Void> {
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 buttonNext.isEnabled = true
 
-                when (response.code()) {//ward completar los responses
+                when (response.code()) {
 
                     /**
                      * Valid link, user not registered
@@ -70,79 +79,28 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                     200 -> {
 
                         val intent = Intent(application, CreateAccountActivity::class.java)
+                        intent.putExtra(LaunchActivity.EXTRA_INVITATION_CODE, invitationCode)
+                        startActivityForResult(intent, ACTIVITY_FOR_RESULT_LOG_IN)
+
+                    }
+
+                    /**
+                     * Valid link, user registered and linked with club or already linked
+                     */
+                    201, 304 -> {
+
+                        val intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)//ward cambiar al activity del home cuando se cree
                         startActivity(intent)
+                        finish()
 
                     }
 
                     /**
-                     * ward checar con Gus si es el mismo el 201 y el 304
-                     * Valid link, user registered and linked with club
-                     */
-                    201 -> {
-
-                        val emailAlreadyRegistered = AlertDialog.Builder(applicationContext, R.style.StyleAlertDialog)
-                        emailAlreadyRegistered.setTitle(getString(R.string.email_is_already_registered))
-                        emailAlreadyRegistered.setMessage(getString(R.string.email_already_linked_to_this_club))
-                        emailAlreadyRegistered.setPositiveButton(getString(R.string.login), object : DialogInterface.OnClickListener {
-
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                val loginIntent = Intent(applicationContext, LoginActivity::class.java)
-                                startActivity(loginIntent)
-                            }
-
-                        })
-                        emailAlreadyRegistered.setNegativeButton(getString(R.string.try_again), object : DialogInterface.OnClickListener {
-
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-
-                            }
-
-                        })
-                        emailAlreadyRegistered.show()
-
-                    }
-
-                    /**
-                     * Valid link, user registered and already linked with club
-                     */
-                    304 -> {
-
-                        val emailAlreadyRegistered = AlertDialog.Builder(applicationContext, R.style.StyleAlertDialog)
-                        emailAlreadyRegistered.setTitle(getString(R.string.email_is_already_registered))
-                        emailAlreadyRegistered.setMessage(getString(R.string.email_already_linked_to_this_club))
-                        emailAlreadyRegistered.setPositiveButton(getString(R.string.login), object : DialogInterface.OnClickListener {
-
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                val loginIntent = Intent(applicationContext, LoginActivity::class.java)
-                                startActivity(loginIntent)
-                            }
-
-                        })
-                        emailAlreadyRegistered.setNegativeButton(getString(R.string.try_again), object : DialogInterface.OnClickListener {
-
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-
-                            }
-
-                        })
-                        emailAlreadyRegistered.show()
-
-                    }
-
-                    /**
-                     * ward checar con Gus si el 400 existe
                      * Link has expired
                      */
                     400 -> {
 
-                    }
-
-                    /**
-                     * Link has expired
-                     */
-                    404 -> {
-
-                        val linkExpiredAlert = AlertDialog.Builder(applicationContext, R.style.StyleAlertDialog)
+                        val linkExpiredAlert = AlertDialog.Builder(this@ConfirmEmailActivity, R.style.StyleAlertDialog)
                         linkExpiredAlert.setTitle(getString(R.string.link_expired))
                         linkExpiredAlert.setMessage(getString(R.string.ask_your_gym_for_another_link))
                         linkExpiredAlert.setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
@@ -184,5 +142,15 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
         buttonNext.setOnClickListener(this)
 
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (resultCode != Activity.RESULT_OK) return
+
+        if (requestCode == ACTIVITY_FOR_RESULT_LOG_IN) {
+            finish()
+        }
+
     }
 }

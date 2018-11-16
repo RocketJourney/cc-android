@@ -1,5 +1,6 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -27,23 +28,14 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
-    companion object {
-        val LOGIN_EXTRA = "LOGIN_EXTRA"
-    }
-
     lateinit var buttonLogin: Button
-    private var isLogin = false
 
     override fun onClick(v: View?) {
 
         if (v == buttonLogin) {
 
             cleanViews()
-
-            if (isLogin)
-                doLogin()
-            else
-                doSignUp()
+            doLogin()
 
         } else if (v == buttonForgotPassword) {
 
@@ -69,16 +61,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         cleanViews()
 
-        if (intent.hasExtra(LOGIN_EXTRA)) {
-            isLogin = intent.getBooleanExtra(LOGIN_EXTRA, true)
-        }
+        buttonForgotPassword.setOnClickListener(this)
 
-        if (isLogin) {
-            textInputLayoutPassword.visibility = View.GONE
-            buttonForgotPassword.visibility = View.GONE
-        } else {
-            buttonForgotPassword.setOnClickListener(this)
-        }
     }
 
     private fun cleanViews() {
@@ -103,18 +87,34 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         val request = LoginRequest(email, password)
 
+        buttonLogin.isEnabled = false
+
         RJRetrofit.getInstance().create(LoginInterface::class.java).loginRequest(request).enqueue(object : Callback<LoginResponse> {
 
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+
+                buttonLogin.isEnabled = true
 
                 when (response.code()) {
 
                     200 -> {
 
+                        val intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)
+                        startActivity(intent)
+                        setResult(Activity.RESULT_OK)
+                        finish()
+
                     }
 
-                    422 -> {
-                        val invalidCredentialsDialog = AlertDialog.Builder(applicationContext, R.style.StyleAlertDialog)
+                    404 -> {
+
+                        Utils.showShortToast("Email not registered") //ward
+
+                    }
+
+                    401 -> {
+
+                        val invalidCredentialsDialog = AlertDialog.Builder(this@LoginActivity, R.style.StyleAlertDialog)
                         invalidCredentialsDialog.setTitle(getString(R.string.email_and_password_dont_match))
                         invalidCredentialsDialog.setMessage(getString(R.string.please_try_again))
                         invalidCredentialsDialog.setPositiveButton(getString(R.string.try_again), object : DialogInterface.OnClickListener {
@@ -126,6 +126,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
                         })
                         invalidCredentialsDialog.show()
+
                     }
 
                 }
@@ -133,36 +134,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                buttonLogin.isEnabled = true
                 Utils.showShortToast("Error en la conexion(?)") //ward
             }
 
         })
-    }
-
-    private fun doSignUp() {
-
-        val email = editTextEmail.text.toString()
-        val password = editTextClubPassword.text.toString()
-
-        if (!Utils.isValidEmail(email)) {
-            textInputLayoutEmail.error = getString(R.string.invalid_email)
-            return
-        }
-
-        if (password.length < 6) {
-            textInputLayoutPassword.error = getString(R.string.password_should_be_6_characters)
-            return
-        }
-
-        buttonLogin.alpha = 0.5f
-        buttonLogin.isEnabled = false
-
-        Handler(Looper.getMainLooper()).postDelayed({
-
-            buttonLogin.alpha = 1f
-            buttonLogin.isEnabled = true
-
-        }, 3000)
     }
 
     private fun launchResetPassword() {

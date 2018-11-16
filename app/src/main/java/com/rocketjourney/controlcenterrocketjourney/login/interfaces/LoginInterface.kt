@@ -12,22 +12,21 @@ interface LoginInterface {
 
     @Headers("Content-Type: application/json", "Accept-Language: en")
     @POST("users")
-    fun signUpRequest(request: SignUpRequest): Call<SignUpResponse>
-
+    fun signUpRequest(@Body request: SignUpRequest): Call<SignUpResponse>
 
     @Headers("Content-Type: application/json", "Accept-Language: en")
     @POST("sessions")
-    fun loginRequest(request: LoginRequest): Call<LoginResponse>
+    fun loginRequest(@Body request: LoginRequest): Call<LoginResponse>
 
     @Headers("Content-Type: application/json", "Accept-Language: en")
-    @GET("invites/{userId}")
-    fun validateEmail(@Path("userId") userId: String, @Query("email") email: String): Call<Void>
+    @GET("invites/{invitationCode}")
+    fun validateEmail(@Path("invitationCode") invitationCode: String, @Query("email") email: String): Call<Void>
 
     @Headers("Content-Type: application/json", "Accept-Language: en")
     @GET("invites/{inviteId}")
     fun validateInvite(@Path("inviteId") inviteId: String): Call<Void>
 
     @Headers("Content-Type: application/json", "Accept-Language: en")
-    @POST("sessions")
-    fun resetPasswordRequest(request: ResetPasswordRequest): Call<Void>
+    @POST("users/passwords")
+    fun resetPasswordRequest(@Body request: ResetPasswordRequest): Call<Void>
 }

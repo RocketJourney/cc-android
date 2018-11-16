@@ -1,55 +1,124 @@
 package com.rocketjourney.controlcenterrocketjourney
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import com.rocketjourney.controlcenterrocketjourney.login.ConfirmEmailActivity
 import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
+import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
+import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
+import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import io.branch.referral.Branch
+import io.branch.referral.BranchError
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import kotlinx.android.synthetic.main.activity_launch.*
 
 class LaunchActivity : AppCompatActivity() {
 
     companion object {
-        val DELAY_BEFORE_INIT = 3000
+        const val EXTRA_INVITATION_CODE = "EXTRA_INVITATION_CODE"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launch)
-
-//        Handler().postDelayed({
-//
-//            intent = Intent(applicationContext, FirstScreenActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//
-//        }, DELAY_BEFORE_INIT.toLong())
     }
 
-    public override fun onStart() {
+    override fun onStart() {
         super.onStart()
-        val branch = Branch.getInstance()
 
         // Branch init
-        branch.initSession({ referringParams, error ->
-            if (error == null) {
-                // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
-                // params will be empty if no data found
-                // ... insert custom logic here ...
+        Branch.getInstance().initSession(object : Branch.BranchReferralInitListener {
+            override fun onInitFinished(referringParams: JSONObject, error: BranchError?) {
+                if (error == null) {
 
-                //ward validar estas validaciones
-                intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                startActivity(intent)
-                finish()
-            } else {
-                //ward leer que es lo que viene aqui
-                intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                startActivity(intent)
-                finish()
+                    val jsonBranch = JSONObject(referringParams.toString())
+                    val openWithDeepLink = jsonBranch.getBoolean("+clicked_branch_link")
+
+                    if (openWithDeepLink) {
+
+                        val invitationCode = jsonBranch.getString("invitation_code")
+                        validateInvitationCode(invitationCode)
+
+                    } else {
+
+                        val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
+                    }
+
+
+                } else {
+
+                    //ward checar si ya hay una sesion iniciada
+                    val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+                    startActivity(intent)
+                    finish()
+
+                }
             }
         }, this.intent.data, this)
     }
 
     public override fun onNewIntent(intent: Intent) {
         this.intent = intent
+    }
+
+    private fun validateInvitationCode(code: String) {
+
+        progressBar.visibility = View.VISIBLE
+
+        RJRetrofit.getInstance().create(LoginInterface::class.java).validateInvite(code).enqueue(object : Callback<Void> {
+
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                progressBar.visibility = View.INVISIBLE
+
+                when (response.code()) {
+
+                    200 -> {
+
+                        val intent = Intent(applicationContext, ConfirmEmailActivity::class.java)
+                        intent.putExtra(EXTRA_INVITATION_CODE, code)
+                        startActivity(intent)
+                        finish()
+
+                    }
+
+                    404, 422 -> {
+
+                        val expiredInvitation = AlertDialog.Builder(this@LaunchActivity, R.style.StyleAlertDialog)
+                        expiredInvitation.setTitle(getString(R.string.link_expired))
+                        expiredInvitation.setMessage(getString(R.string.ask_your_gym_for_another_link))
+                        expiredInvitation.setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
+
+                            override fun onClick(dialog: DialogInterface?, which: Int) {
+                                val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+
+                        })
+
+                    }
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                progressBar.visibility = View.INVISIBLE
+                //ward
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
+
     }
 }

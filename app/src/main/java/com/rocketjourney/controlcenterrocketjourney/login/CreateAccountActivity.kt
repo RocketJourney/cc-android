@@ -1,5 +1,7 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +9,7 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.View
 import android.widget.Button
+import com.rocketjourney.controlcenterrocketjourney.LaunchActivity
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
 import com.rocketjourney.controlcenterrocketjourney.login.requests.SignUpRequest
@@ -22,7 +25,8 @@ import retrofit2.Response
 
 class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
 
-    lateinit var buttonCreate: Button
+    private lateinit var invitationCode: String
+    private lateinit var buttonCreate: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,8 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         componentToolbar.textViewToolbarTitle.text = getString(R.string.create_account)
         componentToolbar.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_yellow_24dp)
         componentToolbar.toolbar.setNavigationOnClickListener { finish() }
+
+        invitationCode = intent.getStringExtra(LaunchActivity.EXTRA_INVITATION_CODE)
     }
 
     override fun onClick(v: View?) {
@@ -75,21 +81,44 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
 
         val user = User(email, firstName, lastName, password)
 
-        val request = SignUpRequest(user, "")//ward agregar la invitacion
+        val request = SignUpRequest(user, invitationCode)
+
+        buttonCreate.isEnabled = false
 
         RJRetrofit.getInstance().create(LoginInterface::class.java).signUpRequest(request).enqueue(object : Callback<SignUpResponse> {
 
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
 
-                if (response.isSuccessful) {
-                    Utils.showShortToast("Cuenta creada!") //ward
-                } else {
-                    Utils.showShortToast("Algo salio mal :(") //ward
+                buttonCreate.isEnabled = true
+
+                Utils.showShortToast("Response code:${response.code()}")//ward
+
+                when (response.code()) {
+
+                    //ward
+                    201 -> {
+
+                        val intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)
+                        startActivity(intent)
+                        setResult(Activity.RESULT_OK)
+                        finish()
+
+                    }
+
+                    404 -> {
+
+                    }
+
+                    422 -> {
+
+                    }
+
                 }
 
             }
 
             override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
+                buttonCreate.isEnabled = true
                 Utils.showShortToast("Error en la conexion(?)") //ward
             }
 

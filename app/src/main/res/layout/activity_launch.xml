@@ -40,7 +40,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:theme="@style/CircularProgressBlack1a"
-            android:visibility="visible"
+            android:visibility="invisible"
             tools:visibility="visible" />
     </LinearLayout>
 

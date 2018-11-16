@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rocketjourney.controlcenterrocketjourney">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".structure.RocketJourneyApp"
         android:allowBackup="true"
@@ -48,7 +50,7 @@
             android:value="key_test_dgHkkQOP1ChLBrQKaJqzybcfADolg5nt" />
 
         <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+        <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
 
         <!-- Branch install referrer tracking -->
         <receiver
