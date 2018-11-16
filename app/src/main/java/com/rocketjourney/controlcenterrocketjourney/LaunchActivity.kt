@@ -8,21 +8,22 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.rocketjourney.controlcenterrocketjourney.login.ConfirmEmailActivity
 import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
+import com.rocketjourney.controlcenterrocketjourney.login.LoginActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
-import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import io.branch.referral.Branch
 import io.branch.referral.BranchError
+import kotlinx.android.synthetic.main.activity_launch.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlinx.android.synthetic.main.activity_launch.*
 
 class LaunchActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_INVITATION_CODE = "EXTRA_INVITATION_CODE"
+        const val EXTRA_EMAIL = "EXTRA_EMAIL"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +44,21 @@ class LaunchActivity : AppCompatActivity() {
 
                     if (openWithDeepLink) {
 
-                        val invitationCode = jsonBranch.getString("invitation_code")
-                        validateInvitationCode(invitationCode)
+                        val comesFromPasswordReset = jsonBranch.getBoolean("login")
+
+                        if (comesFromPasswordReset) {
+
+                            //ward remember to kill the current session
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+
+                        } else {
+
+                            val invitationCode = jsonBranch.getString("invitation_code")
+                            validateInvitationCode(invitationCode)
+
+                        }
 
                     } else {
 
@@ -105,6 +119,7 @@ class LaunchActivity : AppCompatActivity() {
                             }
 
                         })
+                        expiredInvitation.show()
 
                     }
 

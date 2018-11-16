@@ -30,4 +30,6 @@
     <string name="email_already_linked_to_this_club">Ya existe una cuenta con este email ligada a este club.</string>
     <string name="link_expired">Link Expiró</string>
     <string name="ask_your_gym_for_another_link">Pídele al gerente de tu gym otro link de invitación.</string>
+    <string name="email_sent">Email Enviado</string>
+    <string name="check_your_email_and_follow_instructions">Consulta tu email y sigue las instrucciones para restablecer tu contraseña.</string>
 </resources>

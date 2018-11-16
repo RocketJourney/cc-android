@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rocketjourney.controlcenterrocketjourney">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".structure.RocketJourneyApp"
@@ -25,7 +25,9 @@
             <!-- Branch URI scheme -->
             <intent-filter>
                 <data android:scheme="controlcenter" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -33,12 +35,17 @@
             <!-- Branch App Links (optional) -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="nmd7.test-app.link" />
-                <data android:scheme="https" android:host="nmd7-alternate.test-app.link" />
-            </intent-filter>
 
+                <data
+                    android:host="nmd7.test-app.link"
+                    android:scheme="https" />
+                <data
+                    android:host="nmd7-alternate.test-app.link"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
 
         <!-- Branch init -->
@@ -50,7 +57,9 @@
             android:value="key_test_dgHkkQOP1ChLBrQKaJqzybcfADolg5nt" />
 
         <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
+        <meta-data
+            android:name="io.branch.sdk.TestMode"
+            android:value="true" />
 
         <!-- Branch install referrer tracking -->
         <receiver
@@ -76,7 +85,8 @@
         <activity
             android:name=".login.CreateAccountActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".login.ChooseClubRegisterActivity"></activity>
+        <activity android:name=".login.ChooseClubRegisterActivity" />
+        <activity android:name=".home.HomeActivity"></activity>
     </application>
 
 </manifest>

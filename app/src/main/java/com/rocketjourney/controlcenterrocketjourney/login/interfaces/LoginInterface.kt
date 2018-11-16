@@ -26,7 +26,7 @@ interface LoginInterface {
     @GET("invites/{inviteId}")
     fun validateInvite(@Path("inviteId") inviteId: String): Call<Void>
 
-    @Headers("Content-Type: application/json", "Accept-Language: en")
+    @Headers("Content-Type: application/json")
     @POST("users/passwords")
-    fun resetPasswordRequest(@Body request: ResetPasswordRequest): Call<Void>
+    fun resetPasswordRequest(@Body request: ResetPasswordRequest, @Header("Accept-Language") language: String): Call<Void>
 }

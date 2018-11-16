@@ -1,6 +1,9 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
+import android.content.DialogInterface
+import android.content.res.Resources
 import android.os.Bundle
+import android.support.v4.os.ConfigurationCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -62,7 +65,11 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
 
         buttonResetPassword.isEnabled = false
 
-        RJRetrofit.getInstance().create(LoginInterface::class.java).resetPasswordRequest(request).enqueue(object : Callback<Void> {
+        //ward
+        val locale = ConfigurationCompat.getLocales(Resources.getSystem().configuration).get(0)
+        val language = locale.language
+
+        RJRetrofit.getInstance().create(LoginInterface::class.java).resetPasswordRequest(request, language).enqueue(object : Callback<Void> {
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
 
@@ -72,8 +79,17 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
 
                     201 -> {
 
-                        Utils.showLongToast("email sent")//ward
-                        finish()
+                        val emailNotRegisteredDialog = AlertDialog.Builder(this@ForgotPasswordActivity, R.style.StyleAlertDialog)
+                        emailNotRegisteredDialog.setTitle(getString(R.string.email_sent))
+                        emailNotRegisteredDialog.setMessage(getString(R.string.check_your_email_and_follow_instructions))
+                        emailNotRegisteredDialog.setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
+
+                            override fun onClick(dialog: DialogInterface?, which: Int) {
+                                finish()
+                            }
+
+                        })
+                        emailNotRegisteredDialog.show()
 
                     }
 

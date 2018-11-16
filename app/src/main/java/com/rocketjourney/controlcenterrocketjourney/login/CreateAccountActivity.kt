@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import com.rocketjourney.controlcenterrocketjourney.LaunchActivity
 import com.rocketjourney.controlcenterrocketjourney.R
+import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
 import com.rocketjourney.controlcenterrocketjourney.login.requests.SignUpRequest
 import com.rocketjourney.controlcenterrocketjourney.login.responses.SignUpResponse
@@ -28,6 +29,8 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var invitationCode: String
     private lateinit var buttonCreate: Button
 
+    private lateinit var email: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
@@ -40,6 +43,9 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         componentToolbar.toolbar.setNavigationOnClickListener { finish() }
 
         invitationCode = intent.getStringExtra(LaunchActivity.EXTRA_INVITATION_CODE)
+        email = intent.getStringExtra(LaunchActivity.EXTRA_EMAIL)
+
+        editTextEmail.setText(email)
     }
 
     override fun onClick(v: View?) {
@@ -74,8 +80,8 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        if (password.isEmpty()) {
-            Utils.showShortToast(getString(R.string.field_cannot_be_empty, getString(R.string.password)))
+        if (password.length < 6) {
+            Utils.showShortToast(getString(R.string.password_should_be_6_characters))
             return
         }
 
@@ -98,7 +104,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
                     //ward
                     201 -> {
 
-                        val intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)
+                        val intent = Intent(applicationContext, HomeActivity::class.java)
                         startActivity(intent)
                         setResult(Activity.RESULT_OK)
                         finish()
@@ -136,7 +142,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         buttonCreate.setTextColor(getColor(R.color.yellow_ff))
         buttonCreate.setText(R.string.create)
         buttonCreate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
-        buttonCreate.typeface = Utils.montserratBlack()
+        buttonCreate.typeface = Utils.montserratBold()
         buttonCreate.setBackgroundColor(Color.TRANSPARENT)
         buttonCreate.setOnClickListener(this)
 

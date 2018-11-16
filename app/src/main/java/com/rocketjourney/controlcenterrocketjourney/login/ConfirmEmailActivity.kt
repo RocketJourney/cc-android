@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Button
 import com.rocketjourney.controlcenterrocketjourney.LaunchActivity
 import com.rocketjourney.controlcenterrocketjourney.R
+import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
@@ -80,6 +81,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
                         val intent = Intent(application, CreateAccountActivity::class.java)
                         intent.putExtra(LaunchActivity.EXTRA_INVITATION_CODE, invitationCode)
+                        intent.putExtra(LaunchActivity.EXTRA_EMAIL, email)
                         startActivityForResult(intent, ACTIVITY_FOR_RESULT_LOG_IN)
 
                     }
@@ -89,7 +91,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                      */
                     201, 304 -> {
 
-                        val intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)//ward cambiar al activity del home cuando se cree
+                        val intent = Intent(applicationContext, HomeActivity::class.java)
                         startActivity(intent)
                         finish()
 
@@ -137,7 +139,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
         buttonNext.setTextColor(getColor(R.color.yellow_ff))
         buttonNext.setText(R.string.next)
         buttonNext.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
-        buttonNext.typeface = Utils.montserratBlack()
+        buttonNext.typeface = Utils.montserratBold()
         buttonNext.setBackgroundColor(Color.TRANSPARENT)
         buttonNext.setOnClickListener(this)
 

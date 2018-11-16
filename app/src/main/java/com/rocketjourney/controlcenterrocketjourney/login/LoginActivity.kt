@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             cleanViews()
             doLogin()
 
-        } else if (v == buttonForgotPassword) {
+        } else if (v == textViewForgotPassword) {
 
             launchResetPassword()
 
@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         cleanViews()
 
-        buttonForgotPassword.setOnClickListener(this)
+        textViewForgotPassword.setOnClickListener(this)
 
     }
 
@@ -81,7 +81,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         if (password.length < 6) {
-            textInputLayoutEmail.error = getString(R.string.password_should_be_6_characters)
+            textInputLayoutPassword.error = getString(R.string.password_should_be_6_characters)
             return
         }
 
@@ -108,7 +108,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
                     404 -> {
 
-                        Utils.showShortToast("Email not registered") //ward
+                        val emailNotRegisteredDialog = AlertDialog.Builder(this@LoginActivity, R.style.StyleAlertDialog)
+                        emailNotRegisteredDialog.setTitle(getString(R.string.email_not_registered, email))
+                        emailNotRegisteredDialog.setMessage(getString(R.string.try_again_or_sign_up))
+                        emailNotRegisteredDialog.setPositiveButton(getString(R.string.ok), null)
+                        emailNotRegisteredDialog.show()
 
                     }
 
@@ -158,7 +162,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         buttonLogin.text = getString(R.string.enter)
         buttonLogin.setTextColor(getColor(R.color.yellow_ff))
         buttonLogin.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
-        buttonLogin.typeface = Utils.montserratBlack()
+        buttonLogin.typeface = Utils.montserratBold()
         buttonLogin.setBackgroundColor(Color.TRANSPARENT)
         buttonLogin.setOnClickListener(this)
 
