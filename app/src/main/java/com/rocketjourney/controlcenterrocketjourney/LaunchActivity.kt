@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.login.ConfirmEmailActivity
 import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
 import com.rocketjourney.controlcenterrocketjourney.login.LoginActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
+import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import io.branch.referral.Branch
 import io.branch.referral.BranchError
 import kotlinx.android.synthetic.main.activity_launch.*
@@ -62,8 +64,20 @@ class LaunchActivity : AppCompatActivity() {
 
                     } else {
 
-                        val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                        startActivity(intent)
+                        val hasSession = Utils.getBooleanFromPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, false)
+
+                        if (hasSession) {
+
+                            val intentHome = Intent(applicationContext, HomeActivity::class.java)
+                            startActivity(intentHome)
+
+                        } else {
+
+                            val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+                            startActivity(intent)
+
+                        }
+
                         finish()
 
                     }
@@ -71,9 +85,20 @@ class LaunchActivity : AppCompatActivity() {
 
                 } else {
 
-                    //ward checar si ya hay una sesion iniciada
-                    val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                    startActivity(intent)
+                    val hasSession = Utils.getBooleanFromPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, false)
+
+                    if (hasSession) {
+
+                        val intentHome = Intent(applicationContext, HomeActivity::class.java)
+                        startActivity(intentHome)
+
+                    } else {
+
+                        val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+                        startActivity(intent)
+
+                    }
+
                     finish()
 
                 }
@@ -98,6 +123,12 @@ class LaunchActivity : AppCompatActivity() {
 
                     200 -> {
 
+                        //ward checar si entra a confirm email, al dar back, lo debe de mandar al home o al first screen si tiene sesion iniciada o no
+//                        val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+//                        intent.putExtra(EXTRA_INVITATION_CODE, code)
+//                        startActivity(intent)
+//                        finish()
+
                         val intent = Intent(applicationContext, ConfirmEmailActivity::class.java)
                         intent.putExtra(EXTRA_INVITATION_CODE, code)
                         startActivity(intent)
@@ -113,9 +144,22 @@ class LaunchActivity : AppCompatActivity() {
                         expiredInvitation.setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
 
                             override fun onClick(dialog: DialogInterface?, which: Int) {
-                                val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                                startActivity(intent)
-                                finish()
+
+                                val hasSession = Utils.getBooleanFromPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, false)
+
+                                if (hasSession) {
+
+                                    val intent = Intent(applicationContext, HomeActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+
+                                } else {
+
+                                    val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+
+                                }
                             }
 
                         })
@@ -129,8 +173,7 @@ class LaunchActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 progressBar.visibility = View.INVISIBLE
-                //ward
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Utils.showShortToast(getString(R.string.no_network_connection))
             }
 
         })

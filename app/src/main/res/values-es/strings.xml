@@ -32,4 +32,6 @@
     <string name="ask_your_gym_for_another_link">Pídele al gerente de tu gym otro link de invitación.</string>
     <string name="email_sent">Email Enviado</string>
     <string name="check_your_email_and_follow_instructions">Consulta tu email y sigue las instrucciones para restablecer tu contraseña.</string>
+    <string name="interla_server_error">Error Interno del Servidor</string>
+    <string name="no_network_connection">No Hay Conexión a Internet</string>
 </resources>

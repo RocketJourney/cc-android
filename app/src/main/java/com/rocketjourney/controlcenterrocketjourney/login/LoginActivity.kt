@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.Button
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.R.drawable.ic_close_yellow
+import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
 import com.rocketjourney.controlcenterrocketjourney.login.requests.LoginRequest
 import com.rocketjourney.controlcenterrocketjourney.login.responses.LoginResponse
@@ -97,10 +98,22 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
                 when (response.code()) {
 
-                    200 -> {
+                    201 -> {
 
-                        val intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)
-                        startActivity(intent)
+                        Utils.saveBooleanToPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, true)
+
+                        if (response.body()?.data?.clubs?.size!! > 1) {
+
+                            val intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)
+                            startActivity(intent)
+
+                        } else {
+
+                            val intent = Intent(applicationContext, HomeActivity::class.java)
+                            startActivity(intent)
+
+                        }
+
                         setResult(Activity.RESULT_OK)
                         finish()
 
@@ -139,7 +152,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 buttonLogin.isEnabled = true
-                Utils.showShortToast("Error en la conexion(?)") //ward
+                Utils.showShortToast(getString(R.string.no_network_connection))
             }
 
         })

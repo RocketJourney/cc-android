@@ -104,6 +104,12 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
                     //ward
                     201 -> {
 
+                        /**
+                         * ward IMPORTANTE: cerrar todo tipo de sesion antes de dar de alta la nueva
+                         */
+
+                        Utils.saveBooleanToPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, true)
+
                         val intent = Intent(applicationContext, HomeActivity::class.java)
                         startActivity(intent)
                         setResult(Activity.RESULT_OK)
@@ -125,7 +131,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
                 buttonCreate.isEnabled = true
-                Utils.showShortToast("Error en la conexion(?)") //ward
+                Utils.showShortToast(getString(R.string.no_network_connection))
             }
 
         })

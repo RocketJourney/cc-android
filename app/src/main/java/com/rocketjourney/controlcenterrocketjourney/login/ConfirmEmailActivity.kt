@@ -122,7 +122,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 buttonNext.isEnabled = true
-                Utils.showShortToast("Error en la conexion(?)") //ward
+                Utils.showShortToast(getString(R.string.no_network_connection))
             }
 
         })

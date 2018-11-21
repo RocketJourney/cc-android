@@ -10,6 +10,9 @@ public class SignUpResponseData {
     @SerializedName("jwt")
     @Expose
     private String jwt;
+    @SerializedName("user_id")
+    @Expose
+    private int userId;
     @SerializedName("club")
     @Expose
     private Club club;
@@ -27,9 +30,10 @@ public class SignUpResponseData {
      * @param club
      * @param jwt
      */
-    public SignUpResponseData(String jwt, Club club, List<Club> clubs) {
+    public SignUpResponseData(String jwt, int userId, Club club, List<Club> clubs) {
         super();
         this.jwt = jwt;
+        this.userId = userId;
         this.club = club;
         this.clubs = clubs;
     }
@@ -40,6 +44,14 @@ public class SignUpResponseData {
 
     public void setJwt(String jwt) {
         this.jwt = jwt;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public Club getClub() {

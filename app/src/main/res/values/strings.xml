@@ -34,4 +34,6 @@
     <string name="ask_your_gym_for_another_link">Ask the gym manager to send you another invite link.</string>
     <string name="email_sent">Email Sent</string>
     <string name="check_your_email_and_follow_instructions">Please check your email and follow instructions to reset your password.</string>
+    <string name="interla_server_error">Internal Server Error</string>
+    <string name="no_network_connection">No Network Connection</string>
 </resources>

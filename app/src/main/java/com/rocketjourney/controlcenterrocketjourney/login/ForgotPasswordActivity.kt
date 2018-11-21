@@ -109,8 +109,7 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 buttonResetPassword.isEnabled = true
-                //ward
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Utils.showShortToast(getString(R.string.no_network_connection))
             }
 
         })
