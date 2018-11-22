@@ -1,5 +1,6 @@
 package com.rocketjourney.controlcenterrocketjourney
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -7,14 +8,18 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
+import com.rocketjourney.controlcenterrocketjourney.login.ChooseClubRegisterActivity
 import com.rocketjourney.controlcenterrocketjourney.login.ConfirmEmailActivity
 import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
 import com.rocketjourney.controlcenterrocketjourney.login.LoginActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
+import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import io.branch.referral.Branch
 import io.branch.referral.BranchError
+import io.realm.ImportFlag
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_launch.*
 import org.json.JSONObject
 import retrofit2.Call
@@ -26,6 +31,8 @@ class LaunchActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_INVITATION_CODE = "EXTRA_INVITATION_CODE"
         const val EXTRA_EMAIL = "EXTRA_EMAIL"
+
+        val REQUEST_EMAIL_VALIDATION = 101
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +46,7 @@ class LaunchActivity : AppCompatActivity() {
         // Branch init
         Branch.getInstance().initSession(object : Branch.BranchReferralInitListener {
             override fun onInitFinished(referringParams: JSONObject, error: BranchError?) {
+
                 if (error == null) {
 
                     val jsonBranch = JSONObject(referringParams.toString())
@@ -64,46 +72,57 @@ class LaunchActivity : AppCompatActivity() {
 
                     } else {
 
-                        val hasSession = Utils.getBooleanFromPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, false)
-
-                        if (hasSession) {
-
-                            val intentHome = Intent(applicationContext, HomeActivity::class.java)
-                            startActivity(intentHome)
-
-                        } else {
-
-                            val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                            startActivity(intent)
-
-                        }
-
-                        finish()
+                        launchWithSessionValidation()
 
                     }
 
 
                 } else {
 
-                    val hasSession = Utils.getBooleanFromPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, false)
-
-                    if (hasSession) {
-
-                        val intentHome = Intent(applicationContext, HomeActivity::class.java)
-                        startActivity(intentHome)
-
-                    } else {
-
-                        val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                        startActivity(intent)
-
-                    }
-
-                    finish()
+                    launchWithSessionValidation()
 
                 }
             }
         }, this.intent.data, this)
+    }
+
+    private fun launchWithSessionValidation() {
+
+        val user = SessionManager.getCurrentSession()
+
+        val intent: Intent
+
+        if (user != null) {
+
+            if (user.currentClub != null) {
+
+                intent = Intent(applicationContext, HomeActivity::class.java)
+
+            } else if (user.currentClub == null && user.clubs.size > 1) {
+
+                intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)
+
+            } else {
+
+                user.currentClub = user.clubs.first()
+
+                val realm = Realm.getDefaultInstance()
+                realm.executeTransaction {
+                    it.insertOrUpdate(user)
+                }
+
+                intent = Intent(applicationContext, HomeActivity::class.java)
+
+            }
+
+        } else {
+
+            intent = Intent(applicationContext, FirstScreenActivity::class.java)
+
+        }
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     public override fun onNewIntent(intent: Intent) {
@@ -123,15 +142,9 @@ class LaunchActivity : AppCompatActivity() {
 
                     200 -> {
 
-                        //ward checar si entra a confirm email, al dar back, lo debe de mandar al home o al first screen si tiene sesion iniciada o no
-//                        val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-//                        intent.putExtra(EXTRA_INVITATION_CODE, code)
-//                        startActivity(intent)
-//                        finish()
-
                         val intent = Intent(applicationContext, ConfirmEmailActivity::class.java)
                         intent.putExtra(EXTRA_INVITATION_CODE, code)
-                        startActivity(intent)
+                        startActivityForResult(intent, REQUEST_EMAIL_VALIDATION)
                         finish()
 
                     }
@@ -144,26 +157,13 @@ class LaunchActivity : AppCompatActivity() {
                         expiredInvitation.setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
 
                             override fun onClick(dialog: DialogInterface?, which: Int) {
-
-                                val hasSession = Utils.getBooleanFromPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, false)
-
-                                if (hasSession) {
-
-                                    val intent = Intent(applicationContext, HomeActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-
-                                } else {
-
-                                    val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-
-                                }
+                                launchWithSessionValidation()
                             }
 
                         })
-                        expiredInvitation.show()
+                        val alertDialogShown = expiredInvitation.show()
+
+                        Utils.giveDesignToAlertDialog(alertDialogShown, applicationContext)
 
                     }
 
@@ -174,9 +174,20 @@ class LaunchActivity : AppCompatActivity() {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 progressBar.visibility = View.INVISIBLE
                 Utils.showShortToast(getString(R.string.no_network_connection))
+                launchWithSessionValidation()
             }
 
         })
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if(requestCode == REQUEST_EMAIL_VALIDATION){
+
+                launchWithSessionValidation()
+
+        }
 
     }
 }

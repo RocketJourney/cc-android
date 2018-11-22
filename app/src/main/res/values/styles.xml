@@ -22,4 +22,8 @@
         <item name="android:textColorPrimary">@color/gray_be</item>
         <item name="android:fontFamily">font/montserratregular.ttf</item>
     </style>
+
+    <style name="CircularProgressGray" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/gray_a5</item>
+    </style>
 </resources>

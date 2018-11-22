@@ -1,9 +1,11 @@
-package com.rocketjourney.controlcenterrocketjourney.login.objects;
+package com.rocketjourney.controlcenterrocketjourney.structure.objects;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Club {
+import io.realm.RealmObject;
+
+public class Club extends RealmObject {
 
     @SerializedName("namespace")
     @Expose
@@ -14,6 +16,9 @@ public class Club {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("logo")
+    @Expose
+    private String logo;
 
     /**
      * No args constructor for use in serialization
@@ -27,12 +32,14 @@ public class Club {
      * @param id
      * @param name
      * @param namespace
+     * @param logo
      */
-    public Club(String namespace, String name, Integer id) {
+    public Club(String namespace, String name, Integer id, String logo) {
         super();
         this.namespace = namespace;
         this.name = name;
         this.id = id;
+        this.logo = logo;
     }
 
     public String getNamespace() {
@@ -57,5 +64,13 @@ public class Club {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="already_have_an_account">¿Ya tienes cuenta</string>
+    <string name="already_have_an_account">¿Ya tienes cuenta?</string>
     <string name="login">Iniciar Sesión</string>
     <string name="don_t_have_an_account">¿No tienes cuenta?</string>
     <string name="ask_your_manager_to_create_an_account">Pídele al gerente de tu gym un link de invitación para crear una cuenta.</string>
-    <string name="club_namespace">Club Namespace</string>
-    <string name="field_cannot_be_empty">The field %s can\'t be empty</string>
-    <string name="invalid_email">Invalid Email</string>
-    <string name="invalid_namespace">Invalid Namespace</string>
+    <string name="invalid_email">Email Inválido</string>
     <string name="password_should_be_6_characters">La contraseña debe tener al menos 6 caracteres.</string>
     <string name="password">Contraseña</string>
     <string name="forgot_password">¿Olvidaste tu contraseña?</string>
@@ -34,4 +31,5 @@
     <string name="check_your_email_and_follow_instructions">Consulta tu email y sigue las instrucciones para restablecer tu contraseña.</string>
     <string name="interla_server_error">Error Interno del Servidor</string>
     <string name="no_network_connection">No Hay Conexión a Internet</string>
+    <string name="this_field_cant_be_empty">Este campo no puede estar vacío</string>
 </resources>

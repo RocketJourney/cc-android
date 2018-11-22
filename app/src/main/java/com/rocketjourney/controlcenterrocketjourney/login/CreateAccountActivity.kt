@@ -1,10 +1,9 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Menu
 import android.view.View
@@ -13,11 +12,13 @@ import com.rocketjourney.controlcenterrocketjourney.LaunchActivity
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
+import com.rocketjourney.controlcenterrocketjourney.login.objects.User
 import com.rocketjourney.controlcenterrocketjourney.login.requests.SignUpRequest
 import com.rocketjourney.controlcenterrocketjourney.login.responses.SignUpResponse
-import com.rocketjourney.controlcenterrocketjourney.login.objects.User
+import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_account.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
 import retrofit2.Call
@@ -45,6 +46,8 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         invitationCode = intent.getStringExtra(LaunchActivity.EXTRA_INVITATION_CODE)
         email = intent.getStringExtra(LaunchActivity.EXTRA_EMAIL)
 
+        cleanViews()
+
         editTextEmail.setText(email)
     }
 
@@ -58,7 +61,16 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    private fun cleanViews() {
+        textInputLayoutEmail.error = ""
+        textInputLayoutFirstName.error = ""
+        textInputLayoutLastName.error = ""
+        textInputLayoutPassword.error = ""
+    }
+
     private fun sendRequestCreateAccount() {
+
+        cleanViews()
 
         val email = editTextEmail.text.toString()
         val firstName = editTextFirstName.text.toString()
@@ -66,22 +78,22 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         val password = editTextPassword.text.toString()
 
         if (!Utils.isValidEmail(email)) {
-            Utils.showShortToast(getString(R.string.invalid_email))
+            textInputLayoutEmail.error = getString(R.string.invalid_email)
             return
         }
 
         if (firstName.isEmpty()) {
-            Utils.showShortToast(getString(R.string.field_cannot_be_empty, "First name")) //ward
+            textInputLayoutFirstName.error = getString(R.string.this_field_cant_be_empty)
             return
         }
 
         if (lastName.isEmpty()) {
-            Utils.showShortToast(getString(R.string.field_cannot_be_empty, "Last name")) //ward
+            textInputLayoutLastName.error = getString(R.string.this_field_cant_be_empty)
             return
         }
 
         if (password.length < 6) {
-            Utils.showShortToast(getString(R.string.password_should_be_6_characters))
+            textInputLayoutPassword.error = getString(R.string.password_should_be_6_characters)
             return
         }
 
@@ -90,30 +102,26 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         val request = SignUpRequest(user, invitationCode)
 
         buttonCreate.isEnabled = false
+        progressBar.visibility = View.VISIBLE
 
         RJRetrofit.getInstance().create(LoginInterface::class.java).signUpRequest(request).enqueue(object : Callback<SignUpResponse> {
 
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
 
                 buttonCreate.isEnabled = true
-
-                Utils.showShortToast("Response code:${response.code()}")//ward
+                progressBar.visibility = View.GONE
 
                 when (response.code()) {
 
                     //ward
                     201 -> {
 
-                        /**
-                         * ward IMPORTANTE: cerrar todo tipo de sesion antes de dar de alta la nueva
-                         */
-
-                        Utils.saveBooleanToPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, true)
+                        SessionManager.closeSession()
+                        SessionManager.createSession(email, response.body()!!.data)
 
                         val intent = Intent(applicationContext, HomeActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
-                        setResult(Activity.RESULT_OK)
-                        finish()
 
                     }
 
@@ -131,6 +139,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
                 buttonCreate.isEnabled = true
+                progressBar.visibility = View.GONE
                 Utils.showShortToast(getString(R.string.no_network_connection))
             }
 

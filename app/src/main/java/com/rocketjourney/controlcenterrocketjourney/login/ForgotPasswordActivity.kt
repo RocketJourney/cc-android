@@ -89,7 +89,10 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                             }
 
                         })
-                        emailNotRegisteredDialog.show()
+
+                        val alertDialogShown = emailNotRegisteredDialog.show()
+
+                        Utils.giveDesignToAlertDialog(alertDialogShown, applicationContext)
 
                     }
 
@@ -99,7 +102,10 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                         emailNotRegisteredDialog.setTitle(getString(R.string.email_not_registered, email))
                         emailNotRegisteredDialog.setMessage(getString(R.string.try_again_or_sign_up))
                         emailNotRegisteredDialog.setPositiveButton(getString(R.string.ok), null)
-                        emailNotRegisteredDialog.show()
+
+                        val alertDialogShown = emailNotRegisteredDialog.show()
+
+                        Utils.giveDesignToAlertDialog(alertDialogShown, applicationContext)
 
                     }
 

@@ -2,7 +2,9 @@ package com.rocketjourney.controlcenterrocketjourney.login.objects;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.rocketjourney.controlcenterrocketjourney.structure.objects.Club;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SignUpResponseData {
@@ -18,7 +20,7 @@ public class SignUpResponseData {
     private Club club;
     @SerializedName("clubs")
     @Expose
-    private List<Club> clubs = null;
+    private List<Club> clubs = new ArrayList<>();
 
     /**
      * No args constructor for use in serialization

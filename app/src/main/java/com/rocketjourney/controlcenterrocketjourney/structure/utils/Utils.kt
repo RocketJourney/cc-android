@@ -4,16 +4,20 @@ import android.content.Context
 import android.graphics.Typeface
 import android.preference.PreferenceManager
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AlertDialog
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
+import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.structure.RocketJourneyApp
 
 class Utils {
 
     companion object {
 
-        val EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+        private const val EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
 
-        val SHARED_PREFERENCES_HAS_SESSION = "SHARED_PREFERENCES_HAS_SESSION"
+        const val ROUND_CORNERS_CLUBS_RECYCLER_VIEW = 24
 
         /**
          * String utils
@@ -41,6 +45,28 @@ class Utils {
 
         fun showLongToast(text: String) {
             Toast.makeText(RocketJourneyApp.context, text, Toast.LENGTH_LONG).show()
+        }
+
+        /**
+         * AlertDialog utils
+         */
+
+        fun giveDesignToAlertDialog(alerDialog: AlertDialog, context: Context) {
+
+            alerDialog.getButton(AlertDialog.BUTTON_POSITIVE).typeface = montserratBold()
+            alerDialog.getButton(AlertDialog.BUTTON_POSITIVE).textSize = 17f
+            alerDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.yellow_ff))
+
+            alerDialog.getButton(AlertDialog.BUTTON_NEGATIVE).typeface = montserratBold()
+            alerDialog.getButton(AlertDialog.BUTTON_NEGATIVE).textSize = 17f
+            alerDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.red_ff33))
+
+            val textViewTitleDialog = alerDialog.findViewById<TextView>(android.support.v7.appcompat.R.id.alertTitle)
+            val textViewMessageDialog = alerDialog.findViewById<TextView>(android.R.id.message)
+
+            textViewTitleDialog?.typeface = Utils.montserratRegular()
+            textViewMessageDialog?.typeface = Utils.montserratRegular()
+
         }
 
         /**

@@ -14,86 +14,103 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_height="match_parent">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayoutEmail"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-                <EditText
-                    android:id="@+id/editTextEmail"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/editTextEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:fontFamily="@font/montserratregular"
+                        android:hint="@string/email"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/white_ff"
+                        android:textSize="18sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutFirstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:fontFamily="@font/montserratregular"
-                    android:hint="@string/email"
-                    android:lines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/white_ff"
-                    android:textSize="18sp" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginTop="20dp">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayoutFirstName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                    <EditText
+                        android:id="@+id/editTextFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserratregular"
+                        android:hint="@string/name"
+                        android:inputType="textPersonName|textCapWords"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/white_ff"
+                        android:textSize="18sp" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/editTextFirstName"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutLastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserratregular"
-                    android:hint="@string/name"
-                    android:lines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/white_ff"
-                    android:textSize="18sp" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginTop="20dp">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayoutLastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                    <EditText
+                        android:id="@+id/editTextLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserratregular"
+                        android:hint="@string/last_name"
+                        android:inputType="textPersonName|textCapWords"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/white_ff"
+                        android:textSize="18sp" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/editTextLastName"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserratregular"
-                    android:hint="@string/last_name"
-                    android:lines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/white_ff"
-                    android:textSize="18sp" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginTop="20dp"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/yellow_ff">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayoutPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/yellow_ff">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/editTextPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserratregular"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:textColor="@color/white_ff"
+                        tools:text="test@RocketJourney.com" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/editTextPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserratregular"
-                    android:hint="@string/password"
-                    android:inputType="textPassword"
-                    android:textColor="@color/white_ff"
-                    tools:text="test@RocketJourney.com" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:theme="@style/CircularProgressGray"
+                android:visibility="gone" />
+        </FrameLayout>
     </ScrollView>
 </LinearLayout>

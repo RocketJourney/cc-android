@@ -19,6 +19,7 @@ import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
 import com.rocketjourney.controlcenterrocketjourney.login.requests.LoginRequest
 import com.rocketjourney.controlcenterrocketjourney.login.responses.LoginResponse
+import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import kotlinx.android.synthetic.main.activity_login.*
@@ -89,32 +90,35 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         val request = LoginRequest(email, password)
 
         buttonLogin.isEnabled = false
+        progressBar.visibility = View.VISIBLE
 
         RJRetrofit.getInstance().create(LoginInterface::class.java).loginRequest(request).enqueue(object : Callback<LoginResponse> {
 
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
 
                 buttonLogin.isEnabled = true
+                progressBar.visibility = View.GONE
 
                 when (response.code()) {
 
                     201 -> {
 
-                        Utils.saveBooleanToPrefs(applicationContext, Utils.SHARED_PREFERENCES_HAS_SESSION, true)
+                        val user = SessionManager.createSession(email, response.body()!!.data)
 
-                        if (response.body()?.data?.clubs?.size!! > 1) {
+                        if (user.clubs.size > 1) {
 
                             val intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
 
                         } else {
 
                             val intent = Intent(applicationContext, HomeActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
 
                         }
 
-                        setResult(Activity.RESULT_OK)
                         finish()
 
                     }
@@ -125,7 +129,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         emailNotRegisteredDialog.setTitle(getString(R.string.email_not_registered, email))
                         emailNotRegisteredDialog.setMessage(getString(R.string.try_again_or_sign_up))
                         emailNotRegisteredDialog.setPositiveButton(getString(R.string.ok), null)
-                        emailNotRegisteredDialog.show()
+
+                        val alertDialogShown = emailNotRegisteredDialog.show()
+
+                        Utils.giveDesignToAlertDialog(alertDialogShown, applicationContext)
 
                     }
 
@@ -142,7 +149,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                             }
 
                         })
-                        invalidCredentialsDialog.show()
+
+                        val alertDialogShown = invalidCredentialsDialog.show()
+
+                        Utils.giveDesignToAlertDialog(alertDialogShown, applicationContext)
 
                     }
 
@@ -152,6 +162,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 buttonLogin.isEnabled = true
+                progressBar.visibility = View.GONE
                 Utils.showShortToast(getString(R.string.no_network_connection))
             }
 

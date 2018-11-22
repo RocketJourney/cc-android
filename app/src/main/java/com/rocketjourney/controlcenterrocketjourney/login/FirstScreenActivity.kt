@@ -14,25 +14,13 @@ import kotlinx.android.synthetic.main.activity_first_screen.*
 
 class FirstScreenActivity : AppCompatActivity() {
 
-    private val ACTIVITY_FOR_RESULT_LOGIN = 101
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_screen)
 
         buttonLogin.setOnClickListener {
             val intent = Intent(applicationContext, LoginActivity::class.java)
-            startActivityForResult(intent, ACTIVITY_FOR_RESULT_LOGIN)
+            startActivity(intent)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        if (resultCode != Activity.RESULT_OK) return
-
-        if (requestCode == ACTIVITY_FOR_RESULT_LOGIN) {
-            finish()
-        }
-
     }
 }

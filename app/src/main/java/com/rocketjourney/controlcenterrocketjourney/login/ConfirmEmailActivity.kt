@@ -1,12 +1,11 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Menu
 import android.view.View
@@ -15,8 +14,10 @@ import com.rocketjourney.controlcenterrocketjourney.LaunchActivity
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
+import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_confirm_email.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
 import retrofit2.Call
@@ -24,10 +25,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
-
-    companion object {
-        const val ACTIVITY_FOR_RESULT_LOG_IN = 101
-    }
 
     private lateinit var invitationCode: String
 
@@ -42,7 +39,11 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
         componentToolbar.textViewToolbarTitle.text = getString(R.string.create_account)
         componentToolbar.toolbar.setNavigationIcon(R.drawable.ic_close_yellow)
-        componentToolbar.toolbar.setNavigationOnClickListener { finish() }
+        componentToolbar.toolbar.setNavigationOnClickListener {
+            launchWithSessionValidation()
+        }
+
+        cleanViews()
 
         invitationCode = intent.getStringExtra(LaunchActivity.EXTRA_INVITATION_CODE)
 
@@ -56,21 +57,29 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    private fun cleanViews() {
+        textInputLayoutEmail.error = ""
+    }
+
     private fun sendRequest() {
+
+        cleanViews()
 
         val email = editTextEmail.text.toString()
 
         if (!Utils.isValidEmail(email)) {
-            Utils.showShortToast(getString(R.string.invalid_email))
+            textInputLayoutEmail.error = getString(R.string.invalid_email)
             return
         }
 
         buttonNext.isEnabled = false
+        progressBar.visibility = View.VISIBLE
 
         RJRetrofit.getInstance().create(LoginInterface::class.java).validateEmail(invitationCode, email).enqueue(object : Callback<Void> {
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 buttonNext.isEnabled = true
+                progressBar.visibility = View.GONE
 
                 when (response.code()) {
 
@@ -82,7 +91,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                         val intent = Intent(application, CreateAccountActivity::class.java)
                         intent.putExtra(LaunchActivity.EXTRA_INVITATION_CODE, invitationCode)
                         intent.putExtra(LaunchActivity.EXTRA_EMAIL, email)
-                        startActivityForResult(intent, ACTIVITY_FOR_RESULT_LOG_IN)
+                        startActivity(intent)
 
                     }
 
@@ -92,6 +101,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                     201, 304 -> {
 
                         val intent = Intent(applicationContext, HomeActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                         finish()
 
@@ -108,11 +118,14 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                         linkExpiredAlert.setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
 
                             override fun onClick(dialog: DialogInterface?, which: Int) {
-
+                                launchWithSessionValidation()
                             }
 
                         })
-                        linkExpiredAlert.show()
+
+                        val linkExpiredAlertDialog = linkExpiredAlert.show()
+
+                        Utils.giveDesignToAlertDialog(linkExpiredAlertDialog, applicationContext)
 
                     }
 
@@ -122,6 +135,7 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 buttonNext.isEnabled = true
+                progressBar.visibility = View.GONE
                 Utils.showShortToast(getString(R.string.no_network_connection))
             }
 
@@ -146,13 +160,46 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
         return true
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onBackPressed() {
+        launchWithSessionValidation()
+    }
 
-        if (resultCode != Activity.RESULT_OK) return
+    private fun launchWithSessionValidation() {
 
-        if (requestCode == ACTIVITY_FOR_RESULT_LOG_IN) {
-            finish()
+        val user = SessionManager.getCurrentSession()
+
+        val intent: Intent
+
+        if (user != null) {
+
+            if (user.currentClub != null) {
+
+                intent = Intent(applicationContext, HomeActivity::class.java)
+
+            } else if (user.currentClub == null && user.clubs.size > 1) {
+
+                intent = Intent(applicationContext, ChooseClubRegisterActivity::class.java)
+
+            } else {
+
+                user.currentClub = user.clubs.first()
+
+                val realm = Realm.getDefaultInstance()
+                realm.executeTransaction {
+                    it.insertOrUpdate(user)
+                }
+
+                intent = Intent(applicationContext, HomeActivity::class.java)
+
+            }
+
+        } else {
+
+            intent = Intent(applicationContext, FirstScreenActivity::class.java)
+
         }
 
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 }
