@@ -100,10 +100,23 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                      */
                     201, 304 -> {
 
-                        val intent = Intent(applicationContext, HomeActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
-                        finish()
+                        val user = SessionManager.getCurrentSession()
+
+                        if(user != null){
+
+                            val intent = Intent(applicationContext, HomeActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                            finish()
+
+                        } else {
+
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                            finish()
+
+                        }
 
                     }
 
