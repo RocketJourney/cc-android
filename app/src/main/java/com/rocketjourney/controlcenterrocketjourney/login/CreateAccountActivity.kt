@@ -12,13 +12,12 @@ import com.rocketjourney.controlcenterrocketjourney.LaunchActivity
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.login.interfaces.LoginInterface
-import com.rocketjourney.controlcenterrocketjourney.login.objects.User
+import com.rocketjourney.controlcenterrocketjourney.login.objects.UserData
 import com.rocketjourney.controlcenterrocketjourney.login.requests.SignUpRequest
 import com.rocketjourney.controlcenterrocketjourney.login.responses.SignUpResponse
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_account.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
 import retrofit2.Call
@@ -97,7 +96,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        val user = User(email, firstName, lastName, password)
+        val user = UserData(email, firstName, lastName, password)
 
         val request = SignUpRequest(user, invitationCode)
 

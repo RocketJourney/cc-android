@@ -3,7 +3,7 @@ package com.rocketjourney.controlcenterrocketjourney.login.objects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class UserData {
 
     @SerializedName("email")
     @Expose
@@ -22,7 +22,7 @@ public class User {
      * No args constructor for use in serialization
      *
      */
-    public User() {
+    public UserData() {
     }
 
     /**
@@ -32,7 +32,7 @@ public class User {
      * @param firstName
      * @param password
      */
-    public User(String email, String firstName, String lastName, String password) {
+    public UserData(String email, String firstName, String lastName, String password) {
         super();
         this.email = email;
         this.firstName = firstName;

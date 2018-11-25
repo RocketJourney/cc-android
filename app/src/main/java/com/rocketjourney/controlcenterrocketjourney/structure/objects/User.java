@@ -1,7 +1,5 @@
 package com.rocketjourney.controlcenterrocketjourney.structure.objects;
 
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
