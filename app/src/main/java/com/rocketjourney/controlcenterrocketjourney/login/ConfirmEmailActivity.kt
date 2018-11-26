@@ -98,11 +98,11 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
                     /**
                      * Valid link, user registered and linked with club or already linked
                      */
-                    201, 304 -> {
+                    201 -> {
 
                         val user = SessionManager.getCurrentSession()
 
-                        if(user != null){
+                        if (user != null) {
 
                             val intent = Intent(applicationContext, HomeActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -111,10 +111,23 @@ class ConfirmEmailActivity : AppCompatActivity(), View.OnClickListener {
 
                         } else {
 
-                            val intent = Intent(applicationContext, LoginActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                            finish()
+                            val accountLinked = AlertDialog.Builder(this@ConfirmEmailActivity, R.style.StyleAlertDialog)
+                            accountLinked.setTitle(getString(R.string.your_account_was_linked))
+                            accountLinked.setMessage(getString(R.string.your_account_was_linked_to_this_club))
+                            accountLinked.setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
+
+                                override fun onClick(dialog: DialogInterface?, which: Int) {
+                                    val intent = Intent(applicationContext, LoginActivity::class.java)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    startActivity(intent)
+                                    finish()
+                                }
+
+                            })
+
+                            val accountLinkedAlertDialog = accountLinked.show()
+
+                            Utils.giveDesignToAlertDialog(accountLinkedAlertDialog, applicationContext)
 
                         }
 

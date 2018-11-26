@@ -19,8 +19,8 @@ interface LoginInterface {
     fun loginRequest(@Body request: LoginRequest): Call<LoginResponse>
 
     @Headers("Content-Type: application/json", "Accept-Language: en")
-    @GET("invites/{invitationCode}")
-    fun validateEmail(@Path("invitationCode") invitationCode: String, @Query("email") email: String): Call<Void>
+    @GET("invites/{invitationCode}/email/{email}")
+    fun validateEmail(@Path("invitationCode") invitationCode: String, @Path("email") email: String): Call<Void>
 
     @Headers("Content-Type: application/json", "Accept-Language: en")
     @GET("invites/{inviteId}")

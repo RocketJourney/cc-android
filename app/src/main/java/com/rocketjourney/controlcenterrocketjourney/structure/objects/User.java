@@ -1,7 +1,5 @@
 package com.rocketjourney.controlcenterrocketjourney.structure.objects;
 
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -89,7 +87,7 @@ public class User extends RealmObject {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserData{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
