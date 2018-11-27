@@ -87,7 +87,7 @@ public class User extends RealmObject {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserData{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +

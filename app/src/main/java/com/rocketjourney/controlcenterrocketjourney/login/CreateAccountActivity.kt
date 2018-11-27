@@ -1,8 +1,10 @@
 package com.rocketjourney.controlcenterrocketjourney.login
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Menu
@@ -129,6 +131,25 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
                     }
 
                     422 -> {
+
+                        val accountAlreadyExist = AlertDialog.Builder(this@CreateAccountActivity, R.style.StyleAlertDialog)
+                        accountAlreadyExist.setTitle(getString(R.string.email_already_registered))
+                        accountAlreadyExist.setMessage(getString(R.string.there_is_already_account_with_this_email))
+                        accountAlreadyExist.setPositiveButton(getString(R.string.login), object : DialogInterface.OnClickListener {
+
+                            override fun onClick(dialog: DialogInterface?, which: Int) {
+                                val intent = Intent(applicationContext, LoginActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                                finish()
+                            }
+
+                        })
+                        accountAlreadyExist.setNegativeButton(R.string.try_again, null)
+
+                        val accountAlreadyExistAlertDialog = accountAlreadyExist.show()
+
+                        Utils.giveDesignToAlertDialog(accountAlreadyExistAlertDialog, applicationContext)
 
                     }
 

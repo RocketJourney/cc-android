@@ -1,15 +1,16 @@
 package com.rocketjourney.controlcenterrocketjourney.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import com.rocketjourney.controlcenterrocketjourney.R
+import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import com.rocketjourney.controlcenterrocketjourney.structure.objects.User
@@ -109,22 +110,21 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        try{
-            val button = item.title.toString()
-            Utils.showShortToast(button)
-
-            return when (item.itemId) {
-                android.R.id.home -> {
-                    drawerLayoutHome.openDrawer(GravityCompat.START)
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            android.R.id.home -> {
+                drawerLayoutHome.openDrawer(GravityCompat.START)
+                true
             }
-        } catch (e: NullPointerException){
-            e.printStackTrace()
+            else -> super.onOptionsItemSelected(item)
         }
 
-        return true
+    }
 
+    fun logout(view: View){
+        SessionManager.closeSession()
+
+        val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 }

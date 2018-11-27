@@ -53,6 +53,7 @@ class Utils {
 
         fun giveDesignToAlertDialog(alerDialog: AlertDialog, context: Context) {
 
+            alerDialog.setCancelable(false)
             alerDialog.getButton(AlertDialog.BUTTON_POSITIVE).typeface = montserratBold()
             alerDialog.getButton(AlertDialog.BUTTON_POSITIVE).textSize = 17f
             alerDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.yellow_ff))
