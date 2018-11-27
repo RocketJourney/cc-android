@@ -32,4 +32,6 @@
     <string name="interla_server_error">Error Interno del Servidor</string>
     <string name="no_network_connection">No Hay Conexión a Internet</string>
     <string name="this_field_cant_be_empty">Este campo no puede estar vacío</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="users">Users</string>
 </resources>

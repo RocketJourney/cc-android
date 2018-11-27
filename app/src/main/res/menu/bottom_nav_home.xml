@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menuDashboard"
+        android:icon="@drawable/ic_close_yellow"
+        android:title="@string/dashboard" />
+    <item
+        android:id="@+id/menuUsers"
+        android:icon="@drawable/ic_menu"
+        android:title="@string/users" />
+</menu>

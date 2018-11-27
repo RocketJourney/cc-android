@@ -1,9 +1,12 @@
 package com.rocketjourney.controlcenterrocketjourney.home
 
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import com.rocketjourney.controlcenterrocketjourney.R
@@ -30,7 +33,31 @@ class HomeActivity : AppCompatActivity() {
 
         initLeftDrawer()
         fillLeftDrawerInfo()
+        initBottomNavigation()
 
+    }
+
+    private fun initBottomNavigation() {
+        bottomNavigationHome.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
+
+            override fun onNavigationItemSelected(menu: MenuItem): Boolean {
+
+                when (menu.itemId) {
+
+                    R.id.menuDashboard -> {
+                        Utils.showShortToast("dashboard")
+                    }
+
+                    R.id.menuUsers -> {
+                        Utils.showShortToast("users")
+                    }
+
+                }
+
+                return true
+            }
+
+        })
     }
 
     private fun fillLeftDrawerInfo() {
@@ -64,22 +91,40 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        val menu = navigationViewHome.getMenu()
+
+        val menu = navigationViewHome.menu
         menu.add("Title1")
         menu.add("Title2")
         menu.add("Title3")
         menu.add("Title4")
+
+        menu.add(1, R.id.menuNext, 100, "prueba1")
+        menu.add(1, R.id.menuNext, 100, "prueba2")
+        menu.add(2, R.id.menuNext, 100, "Sports World")
+        menu.add(2, R.id.menuNext, 100, "54D")
+
 //        menu.add(R.id.nav_refer, 124, Menu.NONE, "Title2")
 //        menu.add(R.id.nav_refer, 125, Menu.NONE, "Title3")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                drawerLayoutHome.openDrawer(GravityCompat.START)
-                true
+
+        try{
+            val button = item.title.toString()
+            Utils.showShortToast(button)
+
+            return when (item.itemId) {
+                android.R.id.home -> {
+                    drawerLayoutHome.openDrawer(GravityCompat.START)
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
             }
-            else -> super.onOptionsItemSelected(item)
+        } catch (e: NullPointerException){
+            e.printStackTrace()
         }
+
+        return true
+
     }
 }

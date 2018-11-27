@@ -34,4 +34,6 @@
     <string name="interla_server_error">Internal Server Error</string>
     <string name="no_network_connection">No Network Connection</string>
     <string name="this_field_cant_be_empty">This field can’t be empty</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="users">Users</string>
 </resources>
