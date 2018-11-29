@@ -10,16 +10,36 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import com.rocketjourney.controlcenterrocketjourney.R
+import com.rocketjourney.controlcenterrocketjourney.home.fragments.ClubDashboardFragment
+import com.rocketjourney.controlcenterrocketjourney.home.interfaces.HomeInterface
+import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubData
+import com.rocketjourney.controlcenterrocketjourney.home.responses.ClubDataResponse
 import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
+import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import com.rocketjourney.controlcenterrocketjourney.structure.objects.User
+import com.rocketjourney.controlcenterrocketjourney.structure.utils.RoundCornersTransform
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), View.OnClickListener {
+
+    companion object {
+        private const val OWNER = "owner"
+    }
 
     var user: User? = null
+
+    lateinit var textViewUserName: TextView
+    lateinit var textViewClubName: TextView
+    lateinit var imageButtonAddUser: ImageButton
+
+    lateinit var dashboardFragment: ClubDashboardFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +51,23 @@ class HomeActivity : AppCompatActivity() {
         Utils.hideToolbarTitle(supportActionBar)
 
         componentToolbar.textViewToolbarTitle.text = user?.currentClub?.name!!
+        componentToolbar.imageViewToolbarLogo.visibility = View.VISIBLE
 
         initLeftDrawer()
         fillLeftDrawerInfo()
         initBottomNavigation()
+
+    }
+
+    override fun onClick(v: View?) {
+
+        when (v) {
+
+            imageButtonAddUser -> {
+                Utils.showShortToast("Create invite")
+            }
+
+        }
 
     }
 
@@ -63,13 +96,33 @@ class HomeActivity : AppCompatActivity() {
 
     private fun fillLeftDrawerInfo() {
         val frameLayoutHeader = navigationViewHome.getHeaderView(0)
-        val textViewUserName = frameLayoutHeader.findViewById<TextView>(R.id.textViewUserName)
-        val textViewClubName = frameLayoutHeader.findViewById<TextView>(R.id.textViewClubName)
-        val imageButtonAddUser = frameLayoutHeader.findViewById<ImageButton>(R.id.imageButtonAddUser)
+        textViewUserName = frameLayoutHeader.findViewById<TextView>(R.id.textViewUserName)
+        textViewClubName = frameLayoutHeader.findViewById<TextView>(R.id.textViewClubName)
 
-        textViewUserName.text = "${user?.firstName} ${user?.lastName}"
+        imageButtonAddUser = frameLayoutHeader.findViewById<ImageButton>(R.id.imageButtonAddUser)
+        imageButtonAddUser.setOnClickListener(this@HomeActivity)
+
         textViewClubName.text = user?.currentClub?.name
+
+        progressBarHome.visibility = View.VISIBLE
+
+        RJRetrofit.getInstance().create(HomeInterface::class.java).getClubSpots(user?.token!!, user?.currentClub!!.id).enqueue(object : Callback<ClubDataResponse> {
+
+            override fun onResponse(call: Call<ClubDataResponse>, response: Response<ClubDataResponse>) {
+
+                progressBarHome.visibility = View.GONE
+                handleClubSpotsResponse(response)
+
+            }
+
+            override fun onFailure(call: Call<ClubDataResponse>, t: Throwable) {
+                progressBarHome.visibility = View.GONE
+            }
+
+        })
     }
+
+    private var lastMenuSelected: MenuItem? = null
 
     private fun initLeftDrawer() {
 
@@ -79,33 +132,83 @@ class HomeActivity : AppCompatActivity() {
 
             navigationViewHome.setNavigationItemSelectedListener { menuItem ->
 
-                // set item as selected to persist highlight
-                menuItem.isChecked = true
-
-                // close drawer when item is tapped
                 drawerLayoutHome.closeDrawers()
-
-                // Add code here to update the UI based on the item selected
-                // For example, swap UI fragments here
+                handleMenuItemSelected(menuItem)
 
                 true
             }
         }
 
+    }
 
-        val menu = navigationViewHome.menu
-        menu.add("Title1")
-        menu.add("Title2")
-        menu.add("Title3")
-        menu.add("Title4")
+    private fun handleMenuItemSelected(menuItem: MenuItem) {
 
-        menu.add(1, R.id.menuNext, 100, "prueba1")
-        menu.add(1, R.id.menuNext, 100, "prueba2")
-        menu.add(2, R.id.menuNext, 100, "Sports World")
-        menu.add(2, R.id.menuNext, 100, "54D")
+        menuItem.isChecked = true
 
-//        menu.add(R.id.nav_refer, 124, Menu.NONE, "Title2")
-//        menu.add(R.id.nav_refer, 125, Menu.NONE, "Title3")
+        if (lastMenuSelected != null) {
+            lastMenuSelected?.isChecked = false
+        }
+
+        lastMenuSelected = menuItem
+
+    }
+
+    private fun handleClubSpotsResponse(response: Response<ClubDataResponse>) {
+
+        when (response.code()) {
+
+            200 -> {
+
+                val data = response.body()?.data as ClubData
+
+                Picasso.get().load(data.clubInfo.badgeUrl)
+                        .transform(RoundCornersTransform(Utils.ROUND_CORNERS_CLUBS_RECYCLER_VIEW, 0, true, true))
+                        .fit().centerCrop().into(componentToolbar.imageViewToolbarLogo)
+
+                if (data.user?.permission == OWNER) {
+                    imageButtonAddUser.visibility = View.VISIBLE
+                } else {
+                    imageButtonAddUser.visibility = View.GONE
+                }
+
+                textViewUserName.text = "${data.user.firstName} ${data.user.lastName}"
+
+                val menu = navigationViewHome.menu
+
+                var groupCount = 0
+                val spots = data.accesibleSpots
+
+                if (spots.size > 1) {
+                    menu.add(groupCount, R.id.menuItem, 100, getString(R.string.all_locations))
+                    groupCount++
+                }
+
+                for (spot in spots) {
+                    menu.add(groupCount, R.id.menuItem, 100, spot.name)
+                }
+
+                groupCount++
+
+                menu.add(groupCount, R.id.menuItem, 100, getString(R.string.terms_of_service))
+                menu.add(groupCount, R.id.menuItem, 100, getString(R.string.privacy_policy))
+                menu.add(groupCount, R.id.menuItem, 100, getString(R.string.log_out))
+
+                dashboardFragment = ClubDashboardFragment.newInstance(true, 0, 0)
+
+            }
+
+            //ward
+            401 -> {
+
+            }
+
+            //ward
+            403 -> {
+
+            }
+
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -115,16 +218,9 @@ class HomeActivity : AppCompatActivity() {
                 drawerLayoutHome.openDrawer(GravityCompat.START)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 
-    }
-
-    fun logout(view: View){
-        SessionManager.closeSession()
-
-        val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
     }
 }

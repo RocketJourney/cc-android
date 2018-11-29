@@ -22,12 +22,13 @@
             android:layout_weight="1"
             android:background="@color/black_21">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ProgressBar
+                android:id="@+id/progressBarHome"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:onClick="logout"
-                android:text="logout" />
+                android:theme="@style/CircularProgressGray" />
         </FrameLayout>
 
         <android.support.design.widget.BottomNavigationView

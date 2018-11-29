@@ -42,5 +42,11 @@
     <string name="your_account_was_already_linked_with_club">Your account was already linked to this club. Log in with your email and password.</string>
     <string name="email_already_registered">Email is already registered</string>
     <string name="there_is_already_account_with_this_email">There is already an account with this email linked to this club.</string>
->>>>>>> feature/home
+    <string name="all_locations">All Locations</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="log_out">Log Out</string>
+    <string name="num_locations">%s Locations</string>
+    <string name="users_that_have_checked_in">USERS THAT HAVE CHECKED IN</string>
+    <string name="users_with_team">USERS WITH TEAM</string>
 </resources>
