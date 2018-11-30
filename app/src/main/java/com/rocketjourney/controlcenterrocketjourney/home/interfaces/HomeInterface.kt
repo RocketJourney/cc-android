@@ -17,5 +17,6 @@ interface HomeInterface {
 
     @Headers("Content-Type: application/json", "Accept-Language: en")
     @GET("clubs/{clubId}/spots/{spotId}/status")
-    fun getSpotStatus(@Header("Authorization") token: String, @Path("clubId") clubId: Int, @Path("spotId") spotIdOrAllSpots: String): Call<SpotStatusResponse>
+    fun getSpotStatus(@Header("Authorization") token: String, @Path("clubId") clubId: Int,
+                      @Path("spotId") spotIdOrAllSpots: String): Call<SpotStatusResponse>
 }

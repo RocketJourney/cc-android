@@ -3,6 +3,7 @@ package com.rocketjourney.controlcenterrocketjourney.home
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
@@ -12,8 +13,11 @@ import android.widget.TextView
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.fragments.ClubDashboardFragment
 import com.rocketjourney.controlcenterrocketjourney.home.interfaces.HomeInterface
+import com.rocketjourney.controlcenterrocketjourney.home.objects.AccesibleSpot
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubData
+import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubInfo
 import com.rocketjourney.controlcenterrocketjourney.home.responses.ClubDataResponse
+import com.rocketjourney.controlcenterrocketjourney.home.responses.SpotStatusResponse
 import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
@@ -31,6 +35,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         private const val OWNER = "owner"
+        private const val ALL_SPOTS = "all_spots"
     }
 
     var user: User? = null
@@ -38,6 +43,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var textViewUserName: TextView
     lateinit var textViewClubName: TextView
     lateinit var imageButtonAddUser: ImageButton
+
+    lateinit var clubInfo: ClubInfo
+    lateinit var spots: ArrayList<AccesibleSpot>
 
     lateinit var dashboardFragment: ClubDashboardFragment
 
@@ -56,6 +64,15 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         initLeftDrawer()
         fillLeftDrawerInfo()
         initBottomNavigation()
+
+    }
+
+    private fun setFragment(fragment: Fragment) {
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayoutHomeContainer, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
 
     }
 
@@ -151,6 +168,104 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         lastMenuSelected = menuItem
 
+        when (menuItem.title) {
+
+            getString(R.string.terms_of_service) -> {
+                //ward
+            }
+
+            getString(R.string.privacy_policy) -> {
+                //ward
+            }
+
+            getString(R.string.log_out) -> {
+                SessionManager.closeSession()
+
+                val intent = Intent(applicationContext, FirstScreenActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+
+            else -> {
+
+                val spotId: String
+                val allSpots: Boolean = menuItem.title == getString(R.string.all_locations)
+
+                spotId = if (allSpots) {
+
+                    ALL_SPOTS
+
+                } else {
+
+                    if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M) {
+
+                        for (spot in spots) {
+                            if (spot.name == menuItem.title) {
+                                spot.id.toString()
+                            }
+                        }
+
+                        ""
+
+                    } else {
+
+                        spots.stream().filter { i -> i.name == menuItem.title }.findFirst().get().id.toString()
+
+                    }
+                }
+
+                progressBarHome.visibility = View.VISIBLE
+
+                RJRetrofit.getInstance().create(HomeInterface::class.java).getSpotStatus(user!!.token, clubInfo.id, spotId)
+                        .enqueue(object : Callback<SpotStatusResponse> {
+
+                            override fun onResponse(call: Call<SpotStatusResponse>, response: Response<SpotStatusResponse>) {
+
+                                progressBarHome.visibility = View.GONE
+                                handleSpotStatusResponse(response, allSpots)
+                            }
+
+                            override fun onFailure(call: Call<SpotStatusResponse>, t: Throwable) {
+
+                                //ward
+                                progressBarHome.visibility = View.GONE
+
+                            }
+
+                        })
+
+            }
+
+        }
+
+    }
+
+    private fun handleSpotStatusResponse(response: Response<SpotStatusResponse>, allSpots: Boolean) {
+
+        when (response.code()) {
+
+            200 -> {
+                dashboardFragment.refreshData(allSpots, spots.size, response.body()?.spotStatus!!.totalUsersCheckedIn, response.body()?.spotStatus!!.totalUsersWithTeam)
+
+            }
+
+            //ward
+            401 -> {
+
+            }
+
+            //ward
+            403 -> {
+
+            }
+
+            //ward
+            404 -> {
+
+            }
+
+        }
+
     }
 
     private fun handleClubSpotsResponse(response: Response<ClubDataResponse>) {
@@ -160,8 +275,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             200 -> {
 
                 val data = response.body()?.data as ClubData
+                clubInfo = data.clubInfo
 
-                Picasso.get().load(data.clubInfo.badgeUrl)
+                Picasso.get().load(clubInfo.badgeUrl)
                         .transform(RoundCornersTransform(Utils.ROUND_CORNERS_CLUBS_RECYCLER_VIEW, 0, true, true))
                         .fit().centerCrop().into(componentToolbar.imageViewToolbarLogo)
 
@@ -176,7 +292,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 val menu = navigationViewHome.menu
 
                 var groupCount = 0
-                val spots = data.accesibleSpots
+                spots = ArrayList<AccesibleSpot>(data.accesibleSpots)
 
                 if (spots.size > 1) {
                     menu.add(groupCount, R.id.menuItem, 100, getString(R.string.all_locations))
@@ -193,7 +309,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 menu.add(groupCount, R.id.menuItem, 100, getString(R.string.privacy_policy))
                 menu.add(groupCount, R.id.menuItem, 100, getString(R.string.log_out))
 
-                dashboardFragment = ClubDashboardFragment.newInstance(true, 0, 0)
+                dashboardFragment = ClubDashboardFragment.newInstance(true, spots.size, 0, 0)
+                setFragment(dashboardFragment)
+                handleMenuItemSelected(navigationViewHome.menu.getItem(0))
 
             }
 

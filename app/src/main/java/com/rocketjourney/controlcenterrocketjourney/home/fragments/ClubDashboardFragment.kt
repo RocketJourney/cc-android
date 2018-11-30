@@ -13,15 +13,17 @@ class ClubDashboardFragment : Fragment() {
     companion object {
 
         private const val ARG_ALL_SPOTS = "ARG_ALL_SPOTS"
+        private const val ARG_TOTAL_SPOTS = "ARG_TOTAL_SPOTS"
         private const val ARG_USERS_THAT_CHECKED_IN = "ARG_USERS_THAT_CHECKED_IN"
         private const val ARG_USERS_WITH_TEAM = "ARG_USERS_WITH_TEAM"
 
-        fun newInstance(allSpots: Boolean, usersThatCheckedIn: Int, usersWithTeam: Int): ClubDashboardFragment {
+        fun newInstance(allSpots: Boolean, totalSpots: Int, usersThatCheckedIn: Int, usersWithTeam: Int): ClubDashboardFragment {
 
             val fragment = ClubDashboardFragment()
 
             val args = Bundle()
             args.putBoolean(ARG_ALL_SPOTS, allSpots)
+            args.putInt(ARG_TOTAL_SPOTS, totalSpots)
             args.putInt(ARG_USERS_THAT_CHECKED_IN, usersThatCheckedIn)
             args.putInt(ARG_USERS_WITH_TEAM, usersWithTeam)
 
@@ -45,21 +47,24 @@ class ClubDashboardFragment : Fragment() {
         textViewUsersWithTeam = view.findViewById(R.id.textViewUsersWithTeam)
 
         val allSpots = arguments!!.getBoolean(ARG_ALL_SPOTS)
+        val totalSpots = arguments!!.getInt(ARG_TOTAL_SPOTS)
         val usersThatCheckedIn = arguments!!.getInt(ARG_USERS_THAT_CHECKED_IN)
         val usersWithTeam = arguments!!.getInt(ARG_USERS_WITH_TEAM)
 
-        refreshData(allSpots, usersThatCheckedIn, usersWithTeam)
+        refreshData(allSpots, totalSpots, usersThatCheckedIn, usersWithTeam)
 
         return view
     }
 
-    fun refreshData(allSpots: Boolean, usersThatCheckedIn: Int, usersWithTeam: Int) {
+    fun refreshData(allSpots: Boolean, totalSpots: Int, usersThatCheckedIn: Int, usersWithTeam: Int) {
 
-        if (allSpots) textViewNumLocations.visibility = View.VISIBLE
-        else textViewNumLocations.visibility = View.GONE
+        if (allSpots) {
+            textViewNumLocations.visibility = View.VISIBLE
+            textViewNumLocations.text = getString(R.string.num_locations, totalSpots.toString())
+        } else textViewNumLocations.visibility = View.GONE
 
-        textViewUsersThatCheckedIn.text = usersThatCheckedIn as String
-        textViewUsersWithTeam.text = usersWithTeam as String
+        textViewUsersThatCheckedIn.text = usersThatCheckedIn.toString()
+        textViewUsersWithTeam.text = usersWithTeam.toString()
 
     }
 }

@@ -6,7 +6,7 @@ import com.rocketjourney.controlcenterrocketjourney.home.objects.SpotStatus;
 
 public class SpotStatusResponse {
 
-    @SerializedName("spotStatus")
+    @SerializedName("data")
     @Expose
     private SpotStatus spotStatus;
 
