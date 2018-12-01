@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.fragments.ClubDashboardFragment
+import com.rocketjourney.controlcenterrocketjourney.home.fragments.SpotUsersFragment
 import com.rocketjourney.controlcenterrocketjourney.home.interfaces.HomeInterface
 import com.rocketjourney.controlcenterrocketjourney.home.objects.AccesibleSpot
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubData
@@ -47,7 +48,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var clubInfo: ClubInfo
     lateinit var spots: ArrayList<AccesibleSpot>
 
+    private var currentSpotId = ALL_SPOTS
+    private var lastMenuSelected: MenuItem? = null
+    private var currentFragment: Fragment? = null
+
     lateinit var dashboardFragment: ClubDashboardFragment
+    var spotUsersFragment: SpotUsersFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,8 +77,10 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayoutHomeContainer, fragment)
-        transaction.addToBackStack(null)
+        transaction.disallowAddToBackStack()
         transaction.commit()
+
+        currentFragment = fragment
 
     }
 
@@ -96,11 +104,24 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 when (menu.itemId) {
 
                     R.id.menuDashboard -> {
-                        Utils.showShortToast("dashboard")
+
+                        if (currentFragment !is ClubDashboardFragment) {
+                            dashboardFragment.setDashboardData(currentSpotId == ALL_SPOTS, spots.size, )
+                            setFragment(dashboardFragment)
+                        }
+
                     }
 
                     R.id.menuUsers -> {
-                        Utils.showShortToast("users")
+
+                        if (spotUsersFragment == null && currentFragment !is SpotUsersFragment) {
+
+                            spotUsersFragment = SpotUsersFragment.newInstance(clubInfo.id, currentSpotId)
+
+                        } else return true
+
+                        setFragment(spotUsersFragment!!)
+
                     }
 
                 }
@@ -139,8 +160,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         })
     }
 
-    private var lastMenuSelected: MenuItem? = null
-
     private fun initLeftDrawer() {
 
         supportActionBar?.apply {
@@ -159,6 +178,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun handleMenuItemSelected(menuItem: MenuItem) {
+
+        if (menuItem.title == lastMenuSelected?.title) return
 
         menuItem.isChecked = true
 
@@ -188,10 +209,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
             else -> {
 
-                val spotId: String
-                val allSpots: Boolean = menuItem.title == getString(R.string.all_locations)
+                val isAllSpots: Boolean = menuItem.title == getString(R.string.all_locations)
 
-                spotId = if (allSpots) {
+                currentSpotId = if (isAllSpots) {
 
                     ALL_SPOTS
 
@@ -214,25 +234,36 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
 
-                progressBarHome.visibility = View.VISIBLE
+                if (currentFragment is ClubDashboardFragment) {
 
-                RJRetrofit.getInstance().create(HomeInterface::class.java).getSpotStatus(user!!.token, clubInfo.id, spotId)
-                        .enqueue(object : Callback<SpotStatusResponse> {
 
-                            override fun onResponse(call: Call<SpotStatusResponse>, response: Response<SpotStatusResponse>) {
 
-                                progressBarHome.visibility = View.GONE
-                                handleSpotStatusResponse(response, allSpots)
-                            }
+                    progressBarHome.visibility = View.VISIBLE
 
-                            override fun onFailure(call: Call<SpotStatusResponse>, t: Throwable) {
+                    RJRetrofit.getInstance().create(HomeInterface::class.java).getSpotStatus(user!!.token, clubInfo.id, currentSpotId)
+                            .enqueue(object : Callback<SpotStatusResponse> {
 
-                                //ward
-                                progressBarHome.visibility = View.GONE
+                                override fun onResponse(call: Call<SpotStatusResponse>, response: Response<SpotStatusResponse>) {
 
-                            }
+                                    progressBarHome.visibility = View.GONE
+                                    handleSpotStatusResponse(response, isAllSpots)
+                                }
 
-                        })
+                                override fun onFailure(call: Call<SpotStatusResponse>, t: Throwable) {
+
+                                    //ward
+                                    progressBarHome.visibility = View.GONE
+
+                                }
+
+                            })
+
+                } else if (currentFragment is SpotUsersFragment) {
+
+                    spotUsersFragment?.updateUsersList(clubInfo.id, currentSpotId)
+
+                }
+
 
             }
 

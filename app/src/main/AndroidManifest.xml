@@ -85,8 +85,12 @@
         <activity
             android:name=".login.CreateAccountActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".login.ChooseClubRegisterActivity" />
-        <activity android:name=".home.HomeActivity"></activity>
+        <activity
+            android:name=".login.ChooseClubRegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.HomeActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
