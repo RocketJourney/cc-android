@@ -56,7 +56,8 @@ class SpotUsersFragment : Fragment() {
 
         val view = inflater!!.inflate(R.layout.fragment_spot_users, container, false)
 
-        user = SessionManager.getCurrentSession()
+        if (user == null)
+            user = SessionManager.getCurrentSession()
 
         clubId = arguments?.getInt(ARG_CLUB_ID)
         spotIdOrAllSpots = arguments?.getString(ARG_SPOT_ID_OR_ALL_SPOTS)
@@ -69,7 +70,7 @@ class SpotUsersFragment : Fragment() {
         return view
     }
 
-    fun setClubData(clubId: Int, spotIdOrAllSpots: String) {
+    private fun setSpotUsersData(clubId: Int, spotIdOrAllSpots: String) {
         val args = Bundle()
         args.putInt(ARG_CLUB_ID, clubId)
         args.putString(ARG_SPOT_ID_OR_ALL_SPOTS, spotIdOrAllSpots)
@@ -77,6 +78,11 @@ class SpotUsersFragment : Fragment() {
     }
 
     fun updateUsersList(clubId: Int?, spotIdOrAllSpots: String?) {
+
+        setSpotUsersData(clubId!!, spotIdOrAllSpots!!)
+
+        if (user == null)
+            user = SessionManager.getCurrentSession()
 
         //ward remover el 1 del parametro de page
         RJRetrofit.getInstance().create(HomeInterface::class.java).getSpotUsers(user!!.token, clubId, spotIdOrAllSpots, 1)

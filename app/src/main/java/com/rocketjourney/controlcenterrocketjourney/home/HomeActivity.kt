@@ -36,7 +36,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         private const val OWNER = "owner"
-        private const val ALL_SPOTS = "all_spots"
+        const val ALL_SPOTS = "all_spots"
     }
 
     var user: User? = null
@@ -106,7 +106,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     R.id.menuDashboard -> {
 
                         if (currentFragment !is ClubDashboardFragment) {
-                            dashboardFragment.setDashboardData(currentSpotId == ALL_SPOTS, spots.size, )
+                            dashboardFragment.updateDashboardData(clubInfo.id, currentSpotId, spots.size)
                             setFragment(dashboardFragment)
                         }
 
@@ -114,13 +114,18 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
                     R.id.menuUsers -> {
 
-                        if (spotUsersFragment == null && currentFragment !is SpotUsersFragment) {
+                        if (spotUsersFragment == null) {
 
                             spotUsersFragment = SpotUsersFragment.newInstance(clubInfo.id, currentSpotId)
 
-                        } else return true
+                        }
 
-                        setFragment(spotUsersFragment!!)
+                        if (currentFragment !is SpotUsersFragment) {
+
+                            spotUsersFragment!!.updateUsersList(clubInfo.id, currentSpotId)
+                            setFragment(spotUsersFragment!!)
+
+                        }
 
                     }
 
@@ -236,27 +241,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
                 if (currentFragment is ClubDashboardFragment) {
 
-
-
-                    progressBarHome.visibility = View.VISIBLE
-
-                    RJRetrofit.getInstance().create(HomeInterface::class.java).getSpotStatus(user!!.token, clubInfo.id, currentSpotId)
-                            .enqueue(object : Callback<SpotStatusResponse> {
-
-                                override fun onResponse(call: Call<SpotStatusResponse>, response: Response<SpotStatusResponse>) {
-
-                                    progressBarHome.visibility = View.GONE
-                                    handleSpotStatusResponse(response, isAllSpots)
-                                }
-
-                                override fun onFailure(call: Call<SpotStatusResponse>, t: Throwable) {
-
-                                    //ward
-                                    progressBarHome.visibility = View.GONE
-
-                                }
-
-                            })
+                    dashboardFragment.updateDashboardData(clubInfo.id, currentSpotId, spots.size)
 
                 } else if (currentFragment is SpotUsersFragment) {
 
@@ -264,34 +249,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
                 }
 
-
-            }
-
-        }
-
-    }
-
-    private fun handleSpotStatusResponse(response: Response<SpotStatusResponse>, allSpots: Boolean) {
-
-        when (response.code()) {
-
-            200 -> {
-                dashboardFragment.refreshData(allSpots, spots.size, response.body()?.spotStatus!!.totalUsersCheckedIn, response.body()?.spotStatus!!.totalUsersWithTeam)
-
-            }
-
-            //ward
-            401 -> {
-
-            }
-
-            //ward
-            403 -> {
-
-            }
-
-            //ward
-            404 -> {
 
             }
 
@@ -340,9 +297,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 menu.add(groupCount, R.id.menuItem, 100, getString(R.string.privacy_policy))
                 menu.add(groupCount, R.id.menuItem, 100, getString(R.string.log_out))
 
-                dashboardFragment = ClubDashboardFragment.newInstance(true, spots.size, 0, 0)
+                dashboardFragment = ClubDashboardFragment.newInstance(clubInfo.id, currentSpotId, spots.size)
                 setFragment(dashboardFragment)
-                handleMenuItemSelected(navigationViewHome.menu.getItem(0))
+                handleMenuItemSelected(menu.getItem(0))
 
             }
 
