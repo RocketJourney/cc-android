@@ -76,6 +76,8 @@ class ClubDashboardFragment : Fragment() {
 
     private fun refreshData(isAllSpots: Boolean?, spotsSize: Int?, usersThatCheckedIn: Int?, usersWithTeam: Int?) {
 
+        if (!isAdded) return
+
         if (isAllSpots!!) {
             textViewNumLocations.visibility = View.VISIBLE
             textViewNumLocations.text = getString(R.string.num_locations, spotsSize.toString())

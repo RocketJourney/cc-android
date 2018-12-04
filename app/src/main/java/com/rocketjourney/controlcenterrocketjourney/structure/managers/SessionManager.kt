@@ -1,5 +1,9 @@
 package com.rocketjourney.controlcenterrocketjourney.structure.managers
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
 import com.rocketjourney.controlcenterrocketjourney.login.objects.SignUpResponseData
 import com.rocketjourney.controlcenterrocketjourney.structure.objects.User
 import io.realm.Realm
@@ -33,9 +37,13 @@ class SessionManager {
             return user
         }
 
-        fun closeSession() {
+        fun closeSession(context: Context) {
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction { realm.deleteAll() }
+
+            val intent = Intent(context, FirstScreenActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
         }
     }
 }

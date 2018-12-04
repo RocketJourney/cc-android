@@ -117,7 +117,7 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
                     //ward
                     201 -> {
 
-                        SessionManager.closeSession()
+                        SessionManager.closeSession(applicationContext)
                         SessionManager.createSession(email, response.body()!!.data)
 
                         val intent = Intent(applicationContext, HomeActivity::class.java)

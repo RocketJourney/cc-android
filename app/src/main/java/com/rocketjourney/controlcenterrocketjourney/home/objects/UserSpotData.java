@@ -138,4 +138,13 @@ public class UserSpotData implements Serializable {
     public void setCheatDays(Integer cheatDays) {
         this.cheatDays = cheatDays;
     }
+
+    @Override
+    public String toString() {
+        return "UserSpotData{" +
+                ", userId=" + userId +
+                ", lastName=" + lastName +
+                ", firstName='" + firstName +
+                '}';
+    }
 }

@@ -106,7 +106,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     R.id.menuDashboard -> {
 
                         if (currentFragment !is ClubDashboardFragment) {
-                            dashboardFragment.updateDashboardData(clubInfo.id, currentSpotId, spots.size)
+//                            dashboardFragment.updateDashboardData(clubInfo.id, currentSpotId, spots.size)
                             setFragment(dashboardFragment)
                         }
 
@@ -122,7 +122,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
                         if (currentFragment !is SpotUsersFragment) {
 
-                            spotUsersFragment!!.updateUsersList(clubInfo.id, currentSpotId)
+//                            spotUsersFragment!!.updateUsersList(clubInfo.id, currentSpotId)
+//                            spotUsersFragment!!.currentPage = 1
                             setFragment(spotUsersFragment!!)
 
                         }
@@ -205,11 +206,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             getString(R.string.log_out) -> {
-                SessionManager.closeSession()
-
-                val intent = Intent(applicationContext, FirstScreenActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                SessionManager.closeSession(applicationContext)
             }
 
             else -> {
@@ -245,7 +242,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
                 } else if (currentFragment is SpotUsersFragment) {
 
-                    spotUsersFragment?.updateUsersList(clubInfo.id, currentSpotId)
+                    spotUsersFragment?.resetValuesForRequests()
+                    spotUsersFragment?.updateUsersList(clubInfo.id, currentSpotId, SpotUsersFragment.SET_USERS)
 
                 }
 
@@ -305,7 +303,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
             //ward
             401 -> {
-
+                SessionManager.closeSession(applicationContext)
             }
 
             //ward

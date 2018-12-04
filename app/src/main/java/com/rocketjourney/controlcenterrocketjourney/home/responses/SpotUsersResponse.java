@@ -31,4 +31,11 @@ public class SpotUsersResponse {
     public void setData(SpotUsersData data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "SpotUsersResponse{" +
+                "data=" + data +
+                '}';
+    }
 }

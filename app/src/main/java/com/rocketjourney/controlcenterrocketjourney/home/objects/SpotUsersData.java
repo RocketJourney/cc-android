@@ -86,4 +86,11 @@ public class SpotUsersData {
     public void setPageNumber(Integer pageNumber) {
         this.pageNumber = pageNumber;
     }
+
+    @Override
+    public String toString() {
+        return "SpotUsersData{" +
+                "users=" + users +
+                '}';
+    }
 }
