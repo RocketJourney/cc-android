@@ -18,13 +18,12 @@ import com.rocketjourney.controlcenterrocketjourney.home.objects.AccesibleSpot
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubData
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubInfo
 import com.rocketjourney.controlcenterrocketjourney.home.responses.ClubDataResponse
-import com.rocketjourney.controlcenterrocketjourney.home.responses.SpotStatusResponse
-import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import com.rocketjourney.controlcenterrocketjourney.structure.objects.User
 import com.rocketjourney.controlcenterrocketjourney.structure.utils.RoundCornersTransform
+import com.rocketjourney.controlcenterrocketjourney.structure.views.WebViewActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
@@ -37,6 +36,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
         private const val OWNER = "owner"
         const val ALL_SPOTS = "all_spots"
+        const val SOME_SPOTS = "some_spots"
     }
 
     var user: User? = null
@@ -106,8 +106,10 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     R.id.menuDashboard -> {
 
                         if (currentFragment !is ClubDashboardFragment) {
-//                            dashboardFragment.updateDashboardData(clubInfo.id, currentSpotId, spots.size)
+
+                            dashboardFragment.updateDashboardData(clubInfo.id, currentSpotId, spots.size)
                             setFragment(dashboardFragment)
+
                         }
 
                     }
@@ -121,9 +123,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                         }
 
                         if (currentFragment !is SpotUsersFragment) {
-
-//                            spotUsersFragment!!.updateUsersList(clubInfo.id, currentSpotId)
-//                            spotUsersFragment!!.currentPage = 1
+                            spotUsersFragment!!.updateSpotUsersData(clubInfo.id, currentSpotId)
                             setFragment(spotUsersFragment!!)
 
                         }
@@ -193,12 +193,19 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             lastMenuSelected?.isChecked = false
         }
 
+        componentToolbar.textViewToolbarTitle.text = menuItem.title
+
         lastMenuSelected = menuItem
 
         when (menuItem.title) {
 
             getString(R.string.terms_of_service) -> {
-                //ward
+
+                val intent = Intent(this@HomeActivity, WebViewActivity::class.java)
+                intent.putExtra(WebViewActivity.EXTRA_TITLE, getString(R.string.terms_of_service))
+                intent.putExtra(WebViewActivity.EXTRA_URL, getString(R.string.local_terms_path))
+                startActivity(intent)
+
             }
 
             getString(R.string.privacy_policy) -> {
@@ -211,7 +218,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
             else -> {
 
-                val isAllSpots: Boolean = menuItem.title == getString(R.string.all_locations)
+                val isAllSpots: Boolean = menuItem.title == getString(R.string.all_locations) || menuItem.title == getString(R.string.all_my_spots)
 
                 currentSpotId = if (isAllSpots) {
 
@@ -222,7 +229,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M) {
 
                         for (spot in spots) {
-                            if (spot.name == menuItem.title) {
+                            if (spot.branchName == menuItem.title) {
                                 spot.id.toString()
                             }
                         }
@@ -231,7 +238,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
                     } else {
 
-                        spots.stream().filter { i -> i.name == menuItem.title }.findFirst().get().id.toString()
+                        spots.stream().filter { i -> i.branchName == menuItem.title }.findFirst().get().id.toString()
 
                     }
                 }
@@ -267,7 +274,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                         .transform(RoundCornersTransform(Utils.ROUND_CORNERS_CLUBS_RECYCLER_VIEW, 0, true, true))
                         .fit().centerCrop().into(componentToolbar.imageViewToolbarLogo)
 
-                if (data.user?.permission == OWNER) {
+                val permissions = data.user?.permission
+
+                if (permissions == OWNER) {
                     imageButtonAddUser.visibility = View.VISIBLE
                 } else {
                     imageButtonAddUser.visibility = View.GONE
@@ -280,19 +289,28 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 var groupCount = 0
                 spots = ArrayList<AccesibleSpot>(data.accesibleSpots)
 
-                if (spots.size > 1) {
-                    menu.add(groupCount, R.id.menuItem, 100, getString(R.string.all_locations))
+                if (spots.size > 0) {
+                    menu.add(groupCount, R.id.menuItem, 100,
+                            if (permissions == OWNER || permissions == ALL_SPOTS)
+                                getString(R.string.all_locations)
+                            else
+                                getString(R.string.all_my_spots)
+                    )
                     groupCount++
                 }
 
+                spots.sortBy {
+                    it.name
+                }
+
                 for (spot in spots) {
-                    menu.add(groupCount, R.id.menuItem, 100, spot.name)
+                    menu.add(groupCount, R.id.menuItem, 100, spot.branchName)
                 }
 
                 groupCount++
 
                 menu.add(groupCount, R.id.menuItem, 100, getString(R.string.terms_of_service))
-                menu.add(groupCount, R.id.menuItem, 100, getString(R.string.privacy_policy))
+//                menu.add(groupCount, R.id.menuItem, 100, getString(R.string.privacy_policy))
                 menu.add(groupCount, R.id.menuItem, 100, getString(R.string.log_out))
 
                 dashboardFragment = ClubDashboardFragment.newInstance(clubInfo.id, currentSpotId, spots.size)

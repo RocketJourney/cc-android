@@ -1,102 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black_21"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewNumLocations"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/num_locations"
-        android:textColor="@color/gray_9a"
-        android:textSize="15sp"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
+        android:id="@+id/linearLayoutContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="6dp"
-        app:cardBackgroundColor="@color/gray_2d"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp"
-        app:contentPaddingBottom="18dp"
-        app:contentPaddingLeft="20dp"
-        app:contentPaddingRight="20dp"
-        app:contentPaddingTop="12dp">
+        android:layout_height="match_parent"
+        android:background="@color/black_21"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textViewNumLocations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/num_locations"
+            android:textColor="@color/gray_9a"
+            android:textSize="15sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-            <TextView
-                android:id="@+id/textViewCheckedInUsers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserratbold"
-                android:text="@string/tiple_point"
-                android:textColor="@color/white_ff"
-                android:textSize="40sp"
-                tools:text="5012" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserratbold"
-                android:text="@string/users_that_have_checked_in"
-                android:textAllCaps="true"
-                android:textColor="@color/gray_b9"
-                android:textSize="13sp" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="6dp"
-        app:cardBackgroundColor="@color/gray_2d"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp"
-        app:contentPaddingBottom="18dp"
-        app:contentPaddingLeft="20dp"
-        app:contentPaddingRight="20dp"
-        app:contentPaddingTop="12dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="6dp"
+            app:cardBackgroundColor="@color/gray_2d"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp"
+            app:contentPaddingBottom="18dp"
+            app:contentPaddingLeft="20dp"
+            app:contentPaddingRight="20dp"
+            app:contentPaddingTop="12dp">
 
-            <TextView
-                android:id="@+id/textViewUsersWithTeam"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserratbold"
-                android:text="@string/tiple_point"
-                android:textColor="@color/white_ff"
-                android:textSize="40sp"
-                tools:text="980" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewDescription"
+                <TextView
+                    android:id="@+id/textViewCheckedInUsers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratbold"
+                    android:text="@string/tiple_point"
+                    android:textColor="@color/white_ff"
+                    android:textSize="40sp"
+                    tools:text="5012" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratbold"
+                    android:text="@string/users_that_have_checked_in"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray_b9"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="6dp"
+            app:cardBackgroundColor="@color/gray_2d"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp"
+            app:contentPaddingBottom="18dp"
+            app:contentPaddingLeft="20dp"
+            app:contentPaddingRight="20dp"
+            app:contentPaddingTop="12dp">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserratbold"
-                android:text="@string/users_with_team"
-                android:textAllCaps="true"
-                android:textColor="@color/gray_b9"
-                android:textSize="13sp" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewUsersWithTeam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratbold"
+                    android:text="@string/tiple_point"
+                    android:textColor="@color/white_ff"
+                    android:textSize="40sp"
+                    tools:text="980" />
+
+                <TextView
+                    android:id="@+id/textViewDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratbold"
+                    android:text="@string/users_with_team"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray_b9"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:theme="@style/CircularProgressGray" />
+</FrameLayout>

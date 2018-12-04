@@ -47,4 +47,6 @@
     <string name="num_locations">%s Sucursales</string>
     <string name="users_that_have_checked_in">USUARIOS QUE HAN HECHO CHECK-IN</string>
     <string name="users_with_team">USUARIOS CON EQUIPO</string>
+    <string name="all_my_spots">Todas mis Sucursales</string>
+    <string name="local_terms_path">file:///android_asset/terms-es.html</string>
 </resources>

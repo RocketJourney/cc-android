@@ -5,7 +5,8 @@ import android.graphics.Typeface
 import android.preference.PreferenceManager
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AlertDialog
-import android.view.View
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.widget.TextView
 import android.widget.Toast
 import com.rocketjourney.controlcenterrocketjourney.R
@@ -25,6 +26,23 @@ class Utils {
 
         fun isValidEmail(email: String): Boolean {
             return email.matches(EMAIL_PATTERN.toRegex())
+        }
+
+        /**
+         * Converter utils
+         */
+        fun dpToPx(context: Context?, dp: Int): Int {
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), context?.resources?.displayMetrics).toInt()
+        }
+
+        fun spToPixels(context: Context?, sp: Int): Int {
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context?.resources?.displayMetrics).toInt()
+        }
+
+        fun pxToDp(px: Float, context: Context?): Float {
+            val resources = context?.resources
+            val metrics = resources?.displayMetrics
+            return px / (metrics?.densityDpi!!.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**

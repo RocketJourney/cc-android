@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
@@ -42,6 +44,8 @@ class ClubDashboardFragment : Fragment() {
 
     lateinit var user: User
 
+    private lateinit var progressBar: ProgressBar
+    private lateinit var linearLayoutContainer: LinearLayout
     private lateinit var textViewNumLocations: TextView
     private lateinit var textViewUsersThatCheckedIn: TextView
     private lateinit var textViewUsersWithTeam: TextView
@@ -53,6 +57,8 @@ class ClubDashboardFragment : Fragment() {
 
         if (!::user.isInitialized) user = SessionManager.getCurrentSession()!!
 
+        progressBar = view.findViewById(R.id.progressBar)
+        linearLayoutContainer = view.findViewById(R.id.linearLayoutContainer)
         textViewNumLocations = view.findViewById(R.id.textViewNumLocations)
         textViewUsersThatCheckedIn = view.findViewById(R.id.textViewCheckedInUsers)
         textViewUsersWithTeam = view.findViewById(R.id.textViewUsersWithTeam)
@@ -90,21 +96,30 @@ class ClubDashboardFragment : Fragment() {
 
     fun updateDashboardData(clubId: Int, spotIdOrAllSpots: String, spotsSize: Int) {
 
+        if (!::linearLayoutContainer.isInitialized) return
+
         setDashboardData(clubId, spotIdOrAllSpots, spotsSize)
 
         if (!::user.isInitialized) user = SessionManager.getCurrentSession()!!
+
+        linearLayoutContainer.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
 
         RJRetrofit.getInstance().create(HomeInterface::class.java).getSpotStatus(user!!.token, clubId, spotIdOrAllSpots)
                 .enqueue(object : Callback<SpotStatusResponse> {
 
                     override fun onResponse(call: Call<SpotStatusResponse>, response: Response<SpotStatusResponse>) {
 
+                        linearLayoutContainer.visibility = View.VISIBLE
+                        progressBar.visibility = View.GONE
+
                         handleSpotStatusResponse(response, spotIdOrAllSpots == HomeActivity.ALL_SPOTS, spotsSize)
 
                     }
 
                     override fun onFailure(call: Call<SpotStatusResponse>, t: Throwable) {
-
+                        linearLayoutContainer.visibility = View.VISIBLE
+                        progressBar.visibility = View.GONE
                     }
 
                 })

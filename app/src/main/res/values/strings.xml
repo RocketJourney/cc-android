@@ -50,4 +50,6 @@
     <string name="users_that_have_checked_in">USERS THAT HAVE CHECKED IN</string>
     <string name="users_with_team">USERS WITH TEAM</string>
     <string name="tiple_point">...</string>
+    <string name="all_my_spots">All my Locations</string>
+    <string name="local_terms_path">file:///android_asset/terms.html</string>
 </resources>

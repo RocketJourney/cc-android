@@ -31,7 +31,7 @@ class SpotUsersRecyclerViewAdapter(var users: ArrayList<UserSpotData?>?, val con
                     .transform(CircleTransform())
                     .into(view.imageViewUserImage)
 
-            view.textViewUserName.text = "${user?.firstName} ${user?.lastName}"
+            view.textViewUserName.text = "${user?.firstName} ${user?.lastName}".replace("null", "")
             view.textViewUserStreak.text = user?.streak.toString()
 
         }

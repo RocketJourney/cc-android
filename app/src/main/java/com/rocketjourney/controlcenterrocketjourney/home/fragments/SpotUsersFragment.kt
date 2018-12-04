@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.adapters.SpotUsersRecyclerViewAdapter
 import com.rocketjourney.controlcenterrocketjourney.home.adapters.SpotUsersRecyclerViewAdapter.Companion.NUM_ITEMS_PER_PAGE
@@ -15,8 +16,8 @@ import com.rocketjourney.controlcenterrocketjourney.home.objects.UserSpotData
 import com.rocketjourney.controlcenterrocketjourney.home.responses.SpotUsersResponse
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
+import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
 import com.rocketjourney.controlcenterrocketjourney.structure.objects.User
-import kotlinx.android.synthetic.main.item_club.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,6 +57,7 @@ class SpotUsersFragment : Fragment() {
 
     lateinit var users: ArrayList<UserSpotData?>
 
+    lateinit var progressBar: ProgressBar
     lateinit var adapter: SpotUsersRecyclerViewAdapter
     lateinit var recyclerView: RecyclerView
     lateinit var layoutManager: LinearLayoutManager
@@ -87,6 +89,7 @@ class SpotUsersFragment : Fragment() {
         clubId = arguments?.getInt(ARG_CLUB_ID)
         spotIdOrAllSpots = arguments?.getString(ARG_SPOT_ID_OR_ALL_SPOTS)
 
+        progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewSpotUsers)
         layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
@@ -97,12 +100,12 @@ class SpotUsersFragment : Fragment() {
         return view
     }
 
-    fun resetValuesForRequests(){
+    fun resetValuesForRequests() {
         currentPage = 1
         isRequestInQueue = false
     }
 
-    private fun setSpotUsersData(clubId: Int, spotIdOrAllSpots: String) {
+    fun updateSpotUsersData(clubId: Int, spotIdOrAllSpots: String) {
         val args = Bundle()
         args.putInt(ARG_CLUB_ID, clubId)
         args.putString(ARG_SPOT_ID_OR_ALL_SPOTS, spotIdOrAllSpots)
@@ -111,12 +114,18 @@ class SpotUsersFragment : Fragment() {
 
     fun updateUsersList(clubId: Int?, spotIdOrAllSpots: String?, addOrSet: Int) {
 
-        setSpotUsersData(clubId!!, spotIdOrAllSpots!!)
+        updateSpotUsersData(clubId!!, spotIdOrAllSpots!!)
 
         if (user == null)
             user = SessionManager.getCurrentSession()
 
         isRequestInQueue = true
+
+        if (addOrSet == SET_USERS) {
+            recyclerView.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
+
         RJRetrofit.getInstance().create(HomeInterface::class.java).getSpotUsers(user!!.token, clubId, spotIdOrAllSpots, currentPage)
                 .enqueue(object : Callback<SpotUsersResponse> {
 
@@ -125,6 +134,12 @@ class SpotUsersFragment : Fragment() {
                         try {
 
                             isRequestInQueue = false
+
+                            if (addOrSet == SET_USERS) {
+                                recyclerView.visibility = View.VISIBLE
+                                progressBar.visibility = View.GONE
+                            }
+
                             handleUsersSpotResponse(response, addOrSet)
 
                         } catch (e: KotlinNullPointerException) {
@@ -136,6 +151,12 @@ class SpotUsersFragment : Fragment() {
                     override fun onFailure(call: Call<SpotUsersResponse>, t: Throwable) {
                         //ward
                         isRequestInQueue = false
+
+                        if (addOrSet == SET_USERS) {
+                            recyclerView.visibility = View.VISIBLE
+                            progressBar.visibility = View.GONE
+                        }
+
                     }
 
                 })
@@ -162,9 +183,18 @@ class SpotUsersFragment : Fragment() {
 
                     users = response.body()?.data!!.users
 
-                    if (addOrSet == ADD_USERS)
+                    if (addOrSet == ADD_USERS) {
+
+                        val currentItemsSize = adapter.itemCount - 1
                         adapter.addUsers(users)
-                    else if (addOrSet == SET_USERS)
+
+                        /**
+                         * the 72 comes from the height of the progress bar that tells the user that data is being loading, if the height of the progress bar changes,
+                         * this value should change too to the same height (talking in dp's)
+                         */
+                        layoutManager.scrollToPositionWithOffset(currentItemsSize, recyclerView.height - Utils.dpToPx(activity?.applicationContext, 72))
+
+                    } else if (addOrSet == SET_USERS)
                         adapter.setNewUsers(users)
                 }
 
