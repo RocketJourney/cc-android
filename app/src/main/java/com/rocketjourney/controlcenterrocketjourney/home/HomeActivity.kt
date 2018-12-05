@@ -185,7 +185,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun handleMenuItemSelected(menuItem: MenuItem) {
 
-        if (menuItem.title == lastMenuSelected?.title) return
+        val selectedSpotName = menuItem.title
+
+        if (selectedSpotName == lastMenuSelected?.title) return
 
         menuItem.isChecked = true
 
@@ -195,7 +197,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         lastMenuSelected = menuItem
 
-        when (menuItem.title) {
+        when (selectedSpotName) {
 
             getString(R.string.terms_of_service) -> {
 
@@ -216,8 +218,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
             else -> {
 
-                componentToolbar.textViewToolbarTitle.text = menuItem.title
-                val isAllSpots: Boolean = menuItem.title == getString(R.string.all_locations) || menuItem.title == getString(R.string.all_my_spots)
+                componentToolbar.textViewToolbarTitle.text = selectedSpotName
+                val isAllSpots: Boolean = selectedSpotName == getString(R.string.all_locations) || selectedSpotName == getString(R.string.all_my_spots)
 
                 currentSpotId = if (isAllSpots) {
 
@@ -227,17 +229,11 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
                     if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M) {
 
-                        for (spot in spots) {
-                            if (spot.branchName == menuItem.title) {
-                                spot.id.toString()
-                            }
-                        }
-
-                        ""
+                        getSpotId(selectedSpotName.toString())
 
                     } else {
 
-                        spots.stream().filter { i -> i.branchName == menuItem.title }.findFirst().get().id.toString()
+                        spots.stream().filter { i -> i.branchName == selectedSpotName }.findFirst().get().id.toString()
 
                     }
                 }
@@ -252,12 +248,20 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     spotUsersFragment?.updateUsersList(clubInfo.id, currentSpotId, SpotUsersFragment.SET_USERS)
 
                 }
-
-
+                
             }
 
         }
 
+    }
+
+    private fun getSpotId(branchName: String): String {
+        for (spot in spots) {
+            if (spot.branchName == branchName) {
+                return spot.id.toString()
+            }
+        }
+        return ""
     }
 
     private fun handleClubSpotsResponse(response: Response<ClubDataResponse>) {
