@@ -193,8 +193,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             lastMenuSelected?.isChecked = false
         }
 
-        componentToolbar.textViewToolbarTitle.text = menuItem.title
-
         lastMenuSelected = menuItem
 
         when (menuItem.title) {
@@ -213,11 +211,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             getString(R.string.log_out) -> {
-                SessionManager.closeSession(applicationContext)
+                SessionManager.closeSessionAndDisplayFirstScreen(applicationContext)
             }
 
             else -> {
 
+                componentToolbar.textViewToolbarTitle.text = menuItem.title
                 val isAllSpots: Boolean = menuItem.title == getString(R.string.all_locations) || menuItem.title == getString(R.string.all_my_spots)
 
                 currentSpotId = if (isAllSpots) {
@@ -321,7 +320,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
             //ward
             401 -> {
-                SessionManager.closeSession(applicationContext)
+                SessionManager.closeSessionAndDisplayFirstScreen(applicationContext)
             }
 
             //ward

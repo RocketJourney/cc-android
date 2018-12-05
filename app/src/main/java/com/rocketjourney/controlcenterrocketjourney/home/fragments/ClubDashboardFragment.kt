@@ -85,8 +85,15 @@ class ClubDashboardFragment : Fragment() {
         if (!isAdded) return
 
         if (isAllSpots!!) {
+
             textViewNumLocations.visibility = View.VISIBLE
-            textViewNumLocations.text = getString(R.string.num_locations, spotsSize.toString())
+
+            textViewNumLocations.text =
+                    if (spotsSize == 1)
+                        getString(R.string.one_location)
+                    else
+                        getString(R.string.num_locations, spotsSize.toString())
+
         } else textViewNumLocations.visibility = View.GONE
 
         textViewUsersThatCheckedIn.text = usersThatCheckedIn.toString()

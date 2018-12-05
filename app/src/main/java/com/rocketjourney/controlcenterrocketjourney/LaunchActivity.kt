@@ -58,7 +58,7 @@ class LaunchActivity : AppCompatActivity() {
 
                         if (comesFromPasswordReset) {
 
-                            //ward remember to kill the current session
+                            SessionManager.closeSession(applicationContext)
                             val intent = Intent(applicationContext, LoginActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -183,9 +183,9 @@ class LaunchActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if(requestCode == REQUEST_EMAIL_VALIDATION){
+        if (requestCode == REQUEST_EMAIL_VALIDATION) {
 
-                launchWithSessionValidation()
+            launchWithSessionValidation()
 
         }
 

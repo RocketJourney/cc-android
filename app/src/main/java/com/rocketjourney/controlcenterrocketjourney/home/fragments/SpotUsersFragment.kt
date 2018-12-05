@@ -131,6 +131,8 @@ class SpotUsersFragment : Fragment() {
 
                     override fun onResponse(call: Call<SpotUsersResponse>, response: Response<SpotUsersResponse>) {
 
+                        if (!isAdded) return
+
                         try {
 
                             isRequestInQueue = false

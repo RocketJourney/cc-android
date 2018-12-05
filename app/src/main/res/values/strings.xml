@@ -52,4 +52,5 @@
     <string name="tiple_point">...</string>
     <string name="all_my_spots">All my Locations</string>
     <string name="local_terms_path">file:///android_asset/terms.html</string>
+    <string name="one_location">1 Location</string>
 </resources>
