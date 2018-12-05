@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayoutHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gray_5a"
+    android:paddingLeft="30dp"
+    android:paddingTop="40dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="24dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserratbold"
+            android:textColor="@color/white_ff"
+            android:textSize="22sp"
+            tools:text="Jose Ivan" />
+
+        <TextView
+            android:id="@+id/textViewClubName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/montserratbold"
+            android:textColor="@color/gray_be"
+            android:textSize="15sp"
+            tools:text="Sports World" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButtonAddUser"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right|center_vertical"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_invite_home"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+</FrameLayout>

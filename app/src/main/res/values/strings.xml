@@ -1,3 +1,56 @@
 <resources>
-    <string name="app_name">ControlCenterRocketJourney</string>
+    <string name="app_name" translatable="false">ControlCenter</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Log In</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="ask_your_manager_to_create_an_account">Ask the gym manager to send you an invite link to create an account.</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="password_should_be_6_characters">Password should be 6 characters minimum</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="send">SEND</string>
+    <string name="recovery_password">Reset Password</string>
+    <string name="next">Next</string>
+    <string name="name">Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="create">Create</string>
+    <string name="create_account">Create Account</string>
+    <string name="enter">Enter</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="choose_club">Choose Club</string>
+    <string name="email_and_password_dont_match">Email and password do not match</string>
+    <string name="please_try_again">Please try again.</string>
+    <string name="try_again">Try Again</string>
+    <string name="email_not_registered">%s not registered</string>
+    <string name="try_again_or_sign_up">Please try again or sign up for an account.</string>
+    <string name="ok" translatable="false">Ok</string>
+    <string name="email_is_already_registered">Email is already registered</string>
+    <string name="email_already_linked_to_this_club">There is already an account with this email linked to this club.</string>
+    <string name="link_expired">Link Expired</string>
+    <string name="ask_your_gym_for_another_link">Ask the gym manager to send you another invite link.</string>
+    <string name="email_sent">Email Sent</string>
+    <string name="check_your_email_and_follow_instructions">Please check your email and follow instructions to reset your password.</string>
+    <string name="interla_server_error">Internal Server Error</string>
+    <string name="no_network_connection">No Network Connection</string>
+    <string name="this_field_cant_be_empty">This field can’t be empty</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="users">Users</string>
+    <string name="your_account_was_linked">Your account was linked</string>
+    <string name="your_account_was_linked_to_this_club">Your account was linked to this club. Log in with your email and password.</string>
+    <string name="your_account_was_already_linked">Your account was already linked</string>
+    <string name="your_account_was_already_linked_with_club">Your account was already linked to this club. Log in with your email and password.</string>
+    <string name="email_already_registered">Email is already registered</string>
+    <string name="there_is_already_account_with_this_email">There is already an account with this email linked to this club.</string>
+    <string name="all_locations">All Locations</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="log_out">Log Out</string>
+    <string name="num_locations">%s Locations</string>
+    <string name="users_that_have_checked_in">USERS THAT HAVE CHECKED IN</string>
+    <string name="users_with_team">USERS WITH TEAM</string>
+    <string name="tiple_point">...</string>
+    <string name="all_my_spots">All my Locations</string>
+    <string name="local_terms_path">file:///android_asset/terms.html</string>
+    <string name="one_location">1 Location</string>
 </resources>
