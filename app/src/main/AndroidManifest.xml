@@ -59,7 +59,7 @@
         <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
         <meta-data
             android:name="io.branch.sdk.TestMode"
-            android:value="true" />
+            android:value="false" />
 
         <!-- Branch install referrer tracking -->
         <receiver
@@ -94,7 +94,9 @@
         <activity
             android:name=".structure.views.WebViewActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".home.InviteUsersActivity"></activity>
+        <activity
+            android:name=".home.InviteUsersActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

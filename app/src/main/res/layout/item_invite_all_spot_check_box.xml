@@ -5,11 +5,17 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="6dp">
 
-    <RadioButton
-        android:id="@+id/radioButtonSpot"
+    <CheckBox
+        android:id="@+id/checkBoxSpot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/gray_33"
+        android:buttonTint="@drawable/selector_color_check_box_invite_users"
+        android:fontFamily="@font/montserratregular"
+        android:paddingLeft="12dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        android:textColor="@color/white_ff"
+        android:textSize="18sp"
         tools:text="text here" />
 </LinearLayout>

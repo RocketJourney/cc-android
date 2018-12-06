@@ -17,6 +17,7 @@ import com.rocketjourney.controlcenterrocketjourney.home.interfaces.HomeInterfac
 import com.rocketjourney.controlcenterrocketjourney.home.objects.AccesibleSpot
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubData
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubInfo
+import com.rocketjourney.controlcenterrocketjourney.home.objects.SpotStructure
 import com.rocketjourney.controlcenterrocketjourney.home.responses.ClubDataResponse
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
@@ -37,6 +38,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         private const val OWNER = "owner"
         const val ALL_SPOTS = "all_spots"
         const val SOME_SPOTS = "some_spots"
+
+        const val SERIALIZABLE_EXTRA_SPOTS = "SERIALIZABLE_EXTRA_SPOTS"
     }
 
     var user: User? = null
@@ -89,10 +92,27 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         when (v) {
 
             imageButtonAddUser -> {
-//                Utils.showShortToast("Create invite")
+                launchInviteActivity()
             }
 
         }
+
+    }
+
+    private fun launchInviteActivity() {
+
+        val spotsStructure = ArrayList<SpotStructure>()
+
+        spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.DESCRIPTION, null, false))
+        spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.ALL_SPOTS, null, false))
+
+        for (spot in spots) {
+            spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.SPOT, spot, false))
+        }
+
+        val intent = Intent(this@HomeActivity, InviteUsersActivity::class.java)
+        intent.putExtra(SERIALIZABLE_EXTRA_SPOTS, spotsStructure)
+        startActivity(intent)
 
     }
 
@@ -248,7 +268,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     spotUsersFragment?.updateUsersList(clubInfo.id, currentSpotId, SpotUsersFragment.SET_USERS)
 
                 }
-                
+
             }
 
         }

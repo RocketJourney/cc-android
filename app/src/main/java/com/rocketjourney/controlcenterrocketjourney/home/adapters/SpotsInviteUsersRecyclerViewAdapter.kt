@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.objects.SpotStructure
 import kotlinx.android.synthetic.main.item_invite_spot_check_box.view.*
@@ -35,17 +36,49 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
             }
 
             else -> {
-                return View()
+                return ViewHolderSpot(inflater.inflate(R.layout.item_invite_spot_check_box, p0, false))
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return spots.size
+    override fun onBindViewHolder(view: RecyclerView.ViewHolder, p1: Int) {
+
+        if (view is ViewHolderAllSpots) {
+
+            view.checkBoxSpot.text = "Invite all!"//ward
+
+            view.checkBoxSpot.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+
+                override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+
+                    for (spot in spots) {
+                        spot.checked = isChecked
+                    }
+
+                    notifyDataSetChanged()
+
+                }
+            })
+
+        } else if (view is ViewHolderSpot) {
+
+            view.checkBoxSpot.text = spots[p1].spot?.branchName
+            view.checkBoxSpot.isChecked = spots[p1].checked
+
+            view.checkBoxSpot.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+
+                override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+
+
+                }
+            })
+
+        }
+
     }
 
-    override fun onBindViewHolder(p0: ViewHolderSpot, p1: Int) {
-
+    override fun getItemCount(): Int {
+        return spots.size
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -68,11 +101,11 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
     }
 
     class ViewHolderSpot(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val radioButtonSpot = itemView.radioButtonSpot
+        val checkBoxSpot = itemView.checkBoxSpot
     }
 
     class ViewHolderAllSpots(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val radioButtonSpot = itemView.radioButtonSpot
+        val checkBoxSpot = itemView.checkBoxSpot
     }
 
     class ViewHolderDescription(itemView: View) : RecyclerView.ViewHolder(itemView) {
