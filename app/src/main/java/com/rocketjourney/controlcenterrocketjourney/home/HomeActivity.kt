@@ -89,7 +89,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         when (v) {
 
             imageButtonAddUser -> {
-                Utils.showShortToast("Create invite")
+//                Utils.showShortToast("Create invite")
             }
 
         }

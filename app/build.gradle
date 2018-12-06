@@ -9,7 +9,7 @@ android {
         applicationId "com.rocketjourney.controlcenterrocketjourney"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 1
+        versionCode 2
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -33,7 +33,7 @@ android {
             applicationIdSuffix ".production"
             versionNameSuffix "-production"
 
-            buildConfigField "String", "ApiUrl", "\"https://staging.rocketjourney.com/api/v1/\""
+            buildConfigField "String", "ApiUrl", "\"https://rocket-api.com/api/v2/\""
         }
         development {
             dimension "version"
