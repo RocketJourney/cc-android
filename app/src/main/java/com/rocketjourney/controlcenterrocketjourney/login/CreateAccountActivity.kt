@@ -105,6 +105,8 @@ class CreateAccountActivity : AppCompatActivity(), View.OnClickListener {
         buttonCreate.isEnabled = false
         progressBar.visibility = View.VISIBLE
 
+        Utils.hideKeyboard(this@CreateAccountActivity)
+
         RJRetrofit.getInstance().create(LoginInterface::class.java).signUpRequest(request).enqueue(object : Callback<SignUpResponse> {
 
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {

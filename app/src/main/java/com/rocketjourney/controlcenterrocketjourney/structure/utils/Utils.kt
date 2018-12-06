@@ -11,6 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.structure.RocketJourneyApp
+import android.app.Activity
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+
 
 class Utils {
 
@@ -63,6 +67,20 @@ class Utils {
 
         fun showLongToast(text: String) {
             Toast.makeText(RocketJourneyApp.context, text, Toast.LENGTH_LONG).show()
+        }
+
+        /**
+         * Keyboard utils
+         */
+        fun hideKeyboard(activity: Activity) {
+            val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            //Find the currently focused view, so we can grab the correct window token from it.
+            var view = activity.currentFocus
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+            if (view == null) {
+                view = View(activity)
+            }
+            imm.hideSoftInputFromWindow(view!!.windowToken, 0)
         }
 
         /**

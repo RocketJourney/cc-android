@@ -50,4 +50,5 @@
     <string name="all_my_spots">Todas mis Sucursales</string>
     <string name="local_terms_path">file:///android_asset/terms-es.html</string>
     <string name="one_location">1 Sucursal</string>
+    <string name="select_spots_that_user_will_get_access">Selecciona las Sucursales a las cuales tendra acceso el invitado.</string>
 </resources>
