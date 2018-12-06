@@ -104,10 +104,9 @@ class LaunchActivity : AppCompatActivity() {
 
             } else {
 
-                user.currentClub = user.clubs.first()
-
                 val realm = Realm.getDefaultInstance()
                 realm.executeTransaction {
+                    user.currentClub = user.clubs.first()
                     it.insertOrUpdate(user)
                 }
 
