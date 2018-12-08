@@ -97,6 +97,7 @@
         <activity
             android:name=".home.InviteUsersActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".home.SendInviteLinkActivity"></activity>
     </application>
 
 </manifest>

@@ -45,7 +45,7 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
 
         if (view is ViewHolderAllSpots) {
 
-            view.checkBoxSpot.text = "Invite all!"//ward
+            view.checkBoxSpot.text = context.resources.getString(R.string.all_locations)
 
             view.checkBoxSpot.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
 
@@ -68,13 +68,26 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
             view.checkBoxSpot.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
 
                 override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-
-
+                    spots[p1].checked = isChecked
                 }
             })
 
         }
 
+    }
+
+    fun getSelectedSpotsId(): ArrayList<Int> {
+
+        val idsList = ArrayList<Int>()
+
+        spots.forEach {
+
+            if (it.itemType == SpotStructure.SpotItemType.SPOT && it.checked)
+                idsList.add(it.spot!!.id)
+
+        }
+
+        return idsList
     }
 
     override fun getItemCount(): Int {

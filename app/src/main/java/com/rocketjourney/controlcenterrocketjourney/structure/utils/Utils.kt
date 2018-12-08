@@ -12,6 +12,8 @@ import android.widget.Toast
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.structure.RocketJourneyApp
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
@@ -30,6 +32,14 @@ class Utils {
 
         fun isValidEmail(email: String): Boolean {
             return email.matches(EMAIL_PATTERN.toRegex())
+        }
+
+        fun copyToClipboard(context: Context, textToCopy: String, textToShowInToast: String) {
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText(textToShowInToast, textToCopy)
+            clipboard.primaryClip = clip
+
+            Toast.makeText(context, textToShowInToast, Toast.LENGTH_SHORT).show()
         }
 
         /**

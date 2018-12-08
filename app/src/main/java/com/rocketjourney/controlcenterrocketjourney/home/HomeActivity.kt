@@ -40,6 +40,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         const val SOME_SPOTS = "some_spots"
 
         const val SERIALIZABLE_EXTRA_SPOTS = "SERIALIZABLE_EXTRA_SPOTS"
+        const val SERIALIZABLE_EXTRA_CLUB = "SERIALIZABLE_EXTRA_CLUB"
     }
 
     var user: User? = null
@@ -63,6 +64,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_home)
 
         user = SessionManager.getCurrentSession()
+
+        println(user)
 
         setSupportActionBar(componentToolbar.toolbar)
         Utils.hideToolbarTitle(supportActionBar)
@@ -112,6 +115,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         val intent = Intent(this@HomeActivity, InviteUsersActivity::class.java)
         intent.putExtra(SERIALIZABLE_EXTRA_SPOTS, spotsStructure)
+        intent.putExtra(SERIALIZABLE_EXTRA_CLUB, clubInfo)
         startActivity(intent)
 
     }
