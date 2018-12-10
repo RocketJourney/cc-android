@@ -118,6 +118,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         intent.putExtra(SERIALIZABLE_EXTRA_CLUB, clubInfo)
         startActivity(intent)
 
+        overridePendingTransition(R.anim.anim_bottom_to_center, R.anim.anim_fade_out)
+
     }
 
     private fun initBottomNavigation() {

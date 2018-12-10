@@ -27,5 +27,4 @@
             android:clickable="true"
             android:visibility="gone" />
     </FrameLayout>
-
 </LinearLayout>

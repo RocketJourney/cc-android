@@ -59,7 +59,7 @@
         <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
         <meta-data
             android:name="io.branch.sdk.TestMode"
-            android:value="false" />
+            android:value="true" />
 
         <!-- Branch install referrer tracking -->
         <receiver

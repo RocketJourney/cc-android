@@ -51,9 +51,9 @@ class InviteUsersActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var buttonNext: Button
 
-    lateinit var spots: ArrayList<SpotStructure>
-    lateinit var club: ClubInfo
-    lateinit var adapter: SpotsInviteUsersRecyclerViewAdapter
+    private lateinit var spots: ArrayList<SpotStructure>
+    private lateinit var club: ClubInfo
+    private lateinit var adapter: SpotsInviteUsersRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +69,10 @@ class InviteUsersActivity : AppCompatActivity(), View.OnClickListener {
 
         componentToolbar.textViewToolbarTitle.text = getString(R.string.invite_colleague)
         componentToolbar.toolbar.setNavigationIcon(R.drawable.ic_close_yellow)
-        componentToolbar.toolbar.setNavigationOnClickListener { finish() }
+        componentToolbar.toolbar.setNavigationOnClickListener {
+            finish()
+            overridePendingTransition(R.anim.anim_fade_in, R.anim.anim_center_to_bottom)
+        }
 
         adapter = SpotsInviteUsersRecyclerViewAdapter(spots, applicationContext)
 
@@ -93,7 +96,7 @@ class InviteUsersActivity : AppCompatActivity(), View.OnClickListener {
         invitation.clubId = club.id
 
         invitation.permission =
-                if (spots.size -2 == ids.size) HomeActivity.ALL_SPOTS
+                if (spots.size - 2 == ids.size) HomeActivity.ALL_SPOTS
                 else HomeActivity.SOME_SPOTS
 
         request.invitation = invitation
@@ -167,6 +170,7 @@ class InviteUsersActivity : AppCompatActivity(), View.OnClickListener {
 
         if (ACTIVITY_FOR_RESULT_DONE == requestCode) {
             finish()
+            overridePendingTransition(R.anim.anim_fade_in, R.anim.anim_center_to_bottom)
         }
 
     }
