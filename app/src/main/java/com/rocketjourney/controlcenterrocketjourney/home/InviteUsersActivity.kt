@@ -85,7 +85,7 @@ class InviteUsersActivity : AppCompatActivity(), View.OnClickListener {
         val ids = adapter.getSelectedSpotsId()
 
         if (ids.size == 0) {
-            Utils.showShortToast("Select atleast one spot to continue")//ward
+            Utils.showShortToast("Select at least one spot to continue")//ward
             return
         }
 
@@ -94,10 +94,11 @@ class InviteUsersActivity : AppCompatActivity(), View.OnClickListener {
 
         invitation.spots = ids
         invitation.clubId = club.id
+        invitation.permission = adapter.getPermission()
 
-        invitation.permission =
-                if (spots.size - 2 == ids.size) HomeActivity.ALL_SPOTS
-                else HomeActivity.SOME_SPOTS
+        if(invitation.permission == HomeActivity.ALL_SPOTS){
+            invitation.spots = ArrayList()
+        }
 
         request.invitation = invitation
 

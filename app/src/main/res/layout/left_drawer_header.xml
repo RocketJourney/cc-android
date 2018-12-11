@@ -43,7 +43,5 @@
         android:layout_height="40dp"
         android:layout_gravity="right|center_vertical"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_invite_home"
-        android:visibility="invisible"
-        tools:visibility="visible" />
+        android:src="@drawable/ic_invite_home" />
 </LinearLayout>

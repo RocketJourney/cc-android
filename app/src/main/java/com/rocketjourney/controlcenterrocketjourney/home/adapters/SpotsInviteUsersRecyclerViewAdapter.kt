@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import com.rocketjourney.controlcenterrocketjourney.R
+import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
 import com.rocketjourney.controlcenterrocketjourney.home.objects.SpotStructure
 import kotlinx.android.synthetic.main.item_invite_spot_check_box.view.*
 
@@ -16,6 +17,21 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
         private const val TYPE_DESCRIPTION = 0
         private const val TYPE_ALL_SPOTS = 1
         private const val TYPE_SPOT = 2
+    }
+
+    private val views = ArrayList<RecyclerView.ViewHolder>()
+
+    private val allSpotsListener = object : CompoundButton.OnCheckedChangeListener {
+
+        override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+
+            for (spot in spots) {
+                spot.checked = isChecked
+            }
+
+            notifyDataSetChanged()
+
+        }
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RecyclerView.ViewHolder {
@@ -36,7 +52,7 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
             }
 
             else -> {
-                return ViewHolderSpot(inflater.inflate(R.layout.item_invite_spot_check_box, p0, false))
+                ViewHolderSpot(inflater.inflate(R.layout.item_invite_spot_check_box, p0, false))
             }
         }
     }
@@ -47,18 +63,7 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
 
             view.checkBoxSpot.text = context.resources.getString(R.string.all_locations)
 
-            view.checkBoxSpot.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
-
-                override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-
-                    for (spot in spots) {
-                        spot.checked = isChecked
-                    }
-
-                    notifyDataSetChanged()
-
-                }
-            })
+            view.checkBoxSpot.setOnCheckedChangeListener(allSpotsListener)
 
         } else if (view is ViewHolderSpot) {
 
@@ -69,10 +74,23 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
 
                 override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
                     spots[p1].checked = isChecked
+
+                    if (!isChecked && spots[1].itemType == SpotStructure.SpotItemType.ALL_SPOTS && spots[1].checked) {
+
+                        spots[1].checked = false
+                        val allSpotsView = views[1] as ViewHolderAllSpots
+                        allSpotsView.checkBoxSpot.setOnCheckedChangeListener(null)
+                        allSpotsView.checkBoxSpot.isChecked = false
+                        allSpotsView.checkBoxSpot.setOnCheckedChangeListener(allSpotsListener)
+
+                    }
+
                 }
             })
 
         }
+
+        views.add(view)
 
     }
 
@@ -88,6 +106,20 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
         }
 
         return idsList
+    }
+
+    fun getPermission(): String {
+
+        return if (spots[1].itemType == SpotStructure.SpotItemType.ALL_SPOTS && spots[1].checked) {
+
+            HomeActivity.ALL_SPOTS
+
+        } else {
+
+            HomeActivity.SOME_SPOTS
+
+        }
+
     }
 
     override fun getItemCount(): Int {

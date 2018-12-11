@@ -30,14 +30,14 @@ android {
             // Assigns this product flavor to the "version" flavor dimension.
             // This property is optional if you are using only one dimension.
             dimension "version"
-            applicationIdSuffix ".production"
+            applicationIdSuffix ""
             versionNameSuffix "-production"
 
             buildConfigField "String", "ApiUrl", "\"https://rocket-api.com/api/v2/\""
         }
         development {
             dimension "version"
-            applicationIdSuffix ".development"
+            applicationIdSuffix ""
             versionNameSuffix "-development"
 
             buildConfigField "String", "ApiUrl", "\"https://api.testin.space/api/v2/\""
@@ -59,4 +59,7 @@ dependencies {
 
     implementation 'io.branch.sdk.android:library:3.+'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
 }
+
+apply plugin: 'com.google.gms.google-services'

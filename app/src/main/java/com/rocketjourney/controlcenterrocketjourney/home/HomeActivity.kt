@@ -43,7 +43,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         const val SERIALIZABLE_EXTRA_CLUB = "SERIALIZABLE_EXTRA_CLUB"
     }
 
-    var user: User? = null
+    private var user: User? = null
+    private var permissions = ""
 
     lateinit var textViewUserName: TextView
     lateinit var textViewClubName: TextView
@@ -107,7 +108,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         val spotsStructure = ArrayList<SpotStructure>()
 
         spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.DESCRIPTION, null, false))
-        spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.ALL_SPOTS, null, false))
+
+        if (permissions == ALL_SPOTS || permissions == OWNER)
+            spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.ALL_SPOTS, null, false))
 
         for (spot in spots) {
             spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.SPOT, spot, false))
@@ -119,7 +122,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         startActivity(intent)
 
         overridePendingTransition(R.anim.anim_bottom_to_center, R.anim.anim_fade_out)
-
     }
 
     private fun initBottomNavigation() {
@@ -303,13 +305,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                         .transform(RoundCornersTransform(Utils.ROUND_CORNERS_CLUBS_RECYCLER_VIEW, 0, true, true))
                         .fit().centerCrop().into(componentToolbar.imageViewToolbarLogo)
 
-                val permissions = data.user?.permission
-
-                if (permissions == OWNER) {
-                    imageButtonAddUser.visibility = View.VISIBLE
-                } else {
-                    imageButtonAddUser.visibility = View.GONE
-                }
+                permissions = data.user?.permission!!
 
                 textViewUserName.text = "${data.user.firstName} ${data.user.lastName}"
 

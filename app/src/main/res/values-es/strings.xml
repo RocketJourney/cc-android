@@ -55,7 +55,7 @@
     <string name="copy_link">Copiar link</string>
     <string name="this_link_will_be_valid_for_7_days_and_it_can_be_used_by_several_colleagues">Este link será válido durante 7 días y lo pueden utilizar varios colegas. </string>
     <string name="invite_colleague">Invitar Colega</string>
-    <string name="send_link">Send Link</string>
+    <string name="send_link">Enviar Link</string>
     <string name="join_cc_to_manage_all_things_related_to_rj">Únete a ControlCenter para manejar todo lo relacionado con RocketJourney:\n%s</string>
     <string name="link_copied">Link Copiado</string>
     <string name="done_terminar">Terminar</string>
