@@ -89,6 +89,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         buttonLogin.isEnabled = false
         progressBar.visibility = View.VISIBLE
 
+        Utils.hideKeyboard(this@LoginActivity)
+
         RJRetrofit.getInstance().create(LoginInterface::class.java).loginRequest(request).enqueue(object : Callback<LoginResponse> {
 
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {

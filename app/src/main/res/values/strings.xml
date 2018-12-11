@@ -49,8 +49,17 @@
     <string name="num_locations">%s Locations</string>
     <string name="users_that_have_checked_in">USERS THAT HAVE CHECKED IN</string>
     <string name="users_with_team">USERS WITH TEAM</string>
-    <string name="tiple_point">...</string>
+    <string name="tiple_point" translatable="false">...</string>
     <string name="all_my_spots">All my Locations</string>
     <string name="local_terms_path">file:///android_asset/terms.html</string>
     <string name="one_location">1 Location</string>
+    <string name="select_spots_that_user_will_get_access">Select the locations to which your colleague will have access.</string>
+    <string name="send_link_to_colleague_s_via">Send link to colleague(s) via…</string>
+    <string name="copy_link">Copy link</string>
+    <string name="this_link_will_be_valid_for_7_days_and_it_can_be_used_by_several_colleagues">This link will be valid for 7 days and it can be used by several colleagues.</string>
+    <string name="invite_colleague">Invite Colleague</string>
+    <string name="send_link">Send Link</string>
+    <string name="join_cc_to_manage_all_things_related_to_rj">Join ControlCenter to manage all things related to RocketJourney:\n%s</string>
+    <string name="link_copied">Link Copied</string>
+    <string name="done_terminar">Done</string>
 </resources>

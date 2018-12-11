@@ -17,6 +17,7 @@ import com.rocketjourney.controlcenterrocketjourney.home.interfaces.HomeInterfac
 import com.rocketjourney.controlcenterrocketjourney.home.objects.AccesibleSpot
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubData
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubInfo
+import com.rocketjourney.controlcenterrocketjourney.home.objects.SpotStructure
 import com.rocketjourney.controlcenterrocketjourney.home.responses.ClubDataResponse
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
@@ -37,9 +38,13 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         private const val OWNER = "owner"
         const val ALL_SPOTS = "all_spots"
         const val SOME_SPOTS = "some_spots"
+
+        const val SERIALIZABLE_EXTRA_SPOTS = "SERIALIZABLE_EXTRA_SPOTS"
+        const val SERIALIZABLE_EXTRA_CLUB = "SERIALIZABLE_EXTRA_CLUB"
     }
 
-    var user: User? = null
+    private var user: User? = null
+    private var permissions = ""
 
     lateinit var textViewUserName: TextView
     lateinit var textViewClubName: TextView
@@ -60,6 +65,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_home)
 
         user = SessionManager.getCurrentSession()
+
+        println(user)
 
         setSupportActionBar(componentToolbar.toolbar)
         Utils.hideToolbarTitle(supportActionBar)
@@ -89,11 +96,32 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         when (v) {
 
             imageButtonAddUser -> {
-//                Utils.showShortToast("Create invite")
+                launchInviteActivity()
             }
 
         }
 
+    }
+
+    private fun launchInviteActivity() {
+
+        val spotsStructure = ArrayList<SpotStructure>()
+
+        spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.DESCRIPTION, null, false))
+
+        if (permissions == ALL_SPOTS || permissions == OWNER)
+            spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.ALL_SPOTS, null, false))
+
+        for (spot in spots) {
+            spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.SPOT, spot, false))
+        }
+
+        val intent = Intent(this@HomeActivity, InviteUsersActivity::class.java)
+        intent.putExtra(SERIALIZABLE_EXTRA_SPOTS, spotsStructure)
+        intent.putExtra(SERIALIZABLE_EXTRA_CLUB, clubInfo)
+        startActivity(intent)
+
+        overridePendingTransition(R.anim.anim_bottom_to_center, R.anim.anim_fade_out)
     }
 
     private fun initBottomNavigation() {
@@ -248,7 +276,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     spotUsersFragment?.updateUsersList(clubInfo.id, currentSpotId, SpotUsersFragment.SET_USERS)
 
                 }
-                
+
             }
 
         }
@@ -277,13 +305,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                         .transform(RoundCornersTransform(Utils.ROUND_CORNERS_CLUBS_RECYCLER_VIEW, 0, true, true))
                         .fit().centerCrop().into(componentToolbar.imageViewToolbarLogo)
 
-                val permissions = data.user?.permission
-
-                if (permissions == OWNER) {
-                    imageButtonAddUser.visibility = View.VISIBLE
-                } else {
-                    imageButtonAddUser.visibility = View.GONE
-                }
+                permissions = data.user?.permission!!
 
                 textViewUserName.text = "${data.user.firstName} ${data.user.lastName}"
 

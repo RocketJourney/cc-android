@@ -11,6 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.structure.RocketJourneyApp
+import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+
 
 class Utils {
 
@@ -26,6 +32,14 @@ class Utils {
 
         fun isValidEmail(email: String): Boolean {
             return email.matches(EMAIL_PATTERN.toRegex())
+        }
+
+        fun copyToClipboard(context: Context, textToCopy: String, textToShowInToast: String) {
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText(textToShowInToast, textToCopy)
+            clipboard.primaryClip = clip
+
+            Toast.makeText(context, textToShowInToast, Toast.LENGTH_SHORT).show()
         }
 
         /**
@@ -63,6 +77,20 @@ class Utils {
 
         fun showLongToast(text: String) {
             Toast.makeText(RocketJourneyApp.context, text, Toast.LENGTH_LONG).show()
+        }
+
+        /**
+         * Keyboard utils
+         */
+        fun hideKeyboard(activity: Activity) {
+            val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            //Find the currently focused view, so we can grab the correct window token from it.
+            var view = activity.currentFocus
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+            if (view == null) {
+                view = View(activity)
+            }
+            imm.hideSoftInputFromWindow(view!!.windowToken, 0)
         }
 
         /**

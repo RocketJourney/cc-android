@@ -3,7 +3,9 @@ package com.rocketjourney.controlcenterrocketjourney.home.objects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ClubInfo {
+import java.io.Serializable;
+
+public class ClubInfo implements Serializable {
 
     @SerializedName("name")
     @Expose

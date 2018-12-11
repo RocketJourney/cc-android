@@ -26,6 +26,7 @@ class SpotUsersRecyclerViewAdapter(var users: ArrayList<UserSpotData?>?, val con
         if (view is ViewHolderUsersOnClub) {
 
             val user = users!![pos]
+
             Picasso.get().load(user?.profilePic)
                     .fit().centerCrop()
                     .transform(CircleTransform())
