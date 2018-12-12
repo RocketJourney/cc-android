@@ -59,4 +59,5 @@
     <string name="join_cc_to_manage_all_things_related_to_rj">Únete a ControlCenter para manejar todo lo relacionado con RocketJourney:\n%s</string>
     <string name="link_copied">Link Copiado</string>
     <string name="done_terminar">Terminar</string>
+    <string name="guide">Guía</string>
 </resources>

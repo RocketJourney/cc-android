@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.fragments.ClubDashboardFragment
+import com.rocketjourney.controlcenterrocketjourney.home.fragments.InstructionsFragment
 import com.rocketjourney.controlcenterrocketjourney.home.fragments.SpotUsersFragment
 import com.rocketjourney.controlcenterrocketjourney.home.interfaces.HomeInterface
 import com.rocketjourney.controlcenterrocketjourney.home.objects.AccesibleSpot
@@ -57,6 +58,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private var lastMenuSelected: MenuItem? = null
     private var currentFragment: Fragment? = null
 
+    var instructionsFragment: InstructionsFragment? = null
     lateinit var dashboardFragment: ClubDashboardFragment
     var spotUsersFragment: SpotUsersFragment? = null
 
@@ -145,15 +147,25 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     R.id.menuUsers -> {
 
                         if (spotUsersFragment == null) {
-
                             spotUsersFragment = SpotUsersFragment.newInstance(clubInfo.id, currentSpotId)
-
                         }
 
                         if (currentFragment !is SpotUsersFragment) {
                             spotUsersFragment!!.updateSpotUsersData(clubInfo.id, currentSpotId)
                             setFragment(spotUsersFragment!!)
 
+                        }
+
+                    }
+
+                    R.id.menuGuide -> {
+
+                        if (instructionsFragment == null) {
+                            instructionsFragment = InstructionsFragment()
+                        }
+
+                        if (currentFragment !is InstructionsFragment) {
+                            setFragment(instructionsFragment!!)
                         }
 
                     }
