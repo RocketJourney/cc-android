@@ -24,6 +24,8 @@ class Utils {
 
         private const val EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
 
+        const val SHARED_PREFERENCES_PUSH_NOTIFICATIONS_ARE_REGISTERED = "SHARED_PREFERENCES_PUSH_NOTIFICATIONS_ARE_REGISTERED"
+
         const val ROUND_CORNERS_CLUBS_RECYCLER_VIEW = 24
 
         /**

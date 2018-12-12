@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import com.google.firebase.iid.FirebaseInstanceId
 import com.rocketjourney.controlcenterrocketjourney.LaunchActivity
 import com.rocketjourney.controlcenterrocketjourney.R
 import io.branch.referral.Branch

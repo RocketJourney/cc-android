@@ -10,6 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.fragments.ClubDashboardFragment
 import com.rocketjourney.controlcenterrocketjourney.home.fragments.SpotUsersFragment
@@ -18,6 +20,7 @@ import com.rocketjourney.controlcenterrocketjourney.home.objects.AccesibleSpot
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubData
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubInfo
 import com.rocketjourney.controlcenterrocketjourney.home.objects.SpotStructure
+import com.rocketjourney.controlcenterrocketjourney.home.requests.PushNotificationsRequest
 import com.rocketjourney.controlcenterrocketjourney.home.responses.ClubDataResponse
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
@@ -38,6 +41,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         private const val OWNER = "owner"
         const val ALL_SPOTS = "all_spots"
         const val SOME_SPOTS = "some_spots"
+
+        const val ANDROID = "android"
 
         const val SERIALIZABLE_EXTRA_SPOTS = "SERIALIZABLE_EXTRA_SPOTS"
         const val SERIALIZABLE_EXTRA_CLUB = "SERIALIZABLE_EXTRA_CLUB"
@@ -77,6 +82,45 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         initLeftDrawer()
         fillLeftDrawerInfo()
         initBottomNavigation()
+        registerPushNotifications()
+    }
+
+    private fun registerPushNotifications() {
+        val pushNotifsAreAlreadyRegistered = Utils.getBooleanFromPrefs(applicationContext, Utils.SHARED_PREFERENCES_PUSH_NOTIFICATIONS_ARE_REGISTERED, false)
+
+        if (!pushNotifsAreAlreadyRegistered) {
+
+            FirebaseMessaging.getInstance().isAutoInitEnabled = true
+
+            FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+                val request = PushNotificationsRequest()
+
+                request.device = ANDROID
+                request.deviceToken = it.token
+
+                RJRetrofit.getInstance().create(HomeInterface::class.java).registerPushNotifications(user!!.token, request)
+                        .enqueue(object : Callback<Void> {
+
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+
+                                when (response.code()) {
+
+                                    201 -> {
+                                        Utils.saveBooleanToPrefs(applicationContext, Utils.SHARED_PREFERENCES_PUSH_NOTIFICATIONS_ARE_REGISTERED, true)
+                                    }
+
+                                }
+
+                            }
+
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                                //ward
+                            }
+                        })
+            }
+
+        }
 
     }
 
