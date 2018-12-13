@@ -65,4 +65,5 @@
     <string name="join_cc_to_manage_all_things_related_to_rj">Join ControlCenter to manage all things related to RocketJourney:\n%s</string>
     <string name="link_copied">Link Copied</string>
     <string name="done_terminar">Done</string>
+    <string name="user_checked_in_at" formatted="false">%s checked in for the first time at %s</string>
 </resources>

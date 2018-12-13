@@ -10,7 +10,7 @@ import android.util.TypedValue
 import android.widget.TextView
 import android.widget.Toast
 import com.rocketjourney.controlcenterrocketjourney.R
-import com.rocketjourney.controlcenterrocketjourney.structure.RocketJourneyApp
+import com.rocketjourney.controlcenterrocketjourney.structure.RJControlCenter
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -25,6 +25,8 @@ class Utils {
         private const val EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
 
         const val SHARED_PREFERENCES_PUSH_NOTIFICATIONS_ARE_REGISTERED = "SHARED_PREFERENCES_PUSH_NOTIFICATIONS_ARE_REGISTERED"
+
+        const val PUSH_NOTIFICATIONS_COUNT = "PUSH_NOTIFICATIONS_COUNT"
 
         const val ROUND_CORNERS_CLUBS_RECYCLER_VIEW = 24
 
@@ -74,11 +76,11 @@ class Utils {
          */
 
         fun showShortToast(text: String) {
-            Toast.makeText(RocketJourneyApp.context, text, Toast.LENGTH_SHORT).show()
+            Toast.makeText(RJControlCenter.context, text, Toast.LENGTH_SHORT).show()
         }
 
         fun showLongToast(text: String) {
-            Toast.makeText(RocketJourneyApp.context, text, Toast.LENGTH_LONG).show()
+            Toast.makeText(RJControlCenter.context, text, Toast.LENGTH_LONG).show()
         }
 
         /**
@@ -186,19 +188,19 @@ class Utils {
          */
 
         fun montserratBlack(): Typeface {
-            return Typeface.createFromAsset(RocketJourneyApp.context.assets, "fonts/Montserrat-Black.ttf")
+            return Typeface.createFromAsset(RJControlCenter.context.assets, "fonts/Montserrat-Black.ttf")
         }
 
         fun montserratBold(): Typeface {
-            return Typeface.createFromAsset(RocketJourneyApp.context.assets, "fonts/Montserrat-Bold.ttf")
+            return Typeface.createFromAsset(RJControlCenter.context.assets, "fonts/Montserrat-Bold.ttf")
         }
 
         fun montserratLight(): Typeface {
-            return Typeface.createFromAsset(RocketJourneyApp.context.assets, "fonts/Montserrat-Light.ttf")
+            return Typeface.createFromAsset(RJControlCenter.context.assets, "fonts/Montserrat-Light.ttf")
         }
 
         fun montserratRegular(): Typeface {
-            return Typeface.createFromAsset(RocketJourneyApp.context.assets, "fonts/Montserrat-Regular.ttf")
+            return Typeface.createFromAsset(RJControlCenter.context.assets, "fonts/Montserrat-Regular.ttf")
         }
 
     }

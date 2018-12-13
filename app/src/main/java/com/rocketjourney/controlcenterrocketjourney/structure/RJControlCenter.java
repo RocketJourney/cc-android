@@ -9,7 +9,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmMigration;
 
-public class RocketJourneyApp extends Application {
+public class RJControlCenter extends Application {
 
     public static final String ROCKETJOURNEYCC_REALM = "rocketjourneycc.realm";
     public static Context context;
