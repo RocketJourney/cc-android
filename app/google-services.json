@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:495281055978:android:f8b10922107662a4",
         "android_client_info": {
-          "package_name": "com.rocketjourney.controlcenterrocketjourney"
+          "package_name": "com.rocketjourney.controlcenterrocketjourney.production"
         }
       },
       "oauth_client": [
