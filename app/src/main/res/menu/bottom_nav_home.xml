@@ -8,4 +8,9 @@
         android:id="@+id/menuUsers"
         android:icon="@drawable/ic_spot_users_home"
         android:title="@string/users" />
+
+    <item
+        android:id="@+id/menuGuide"
+        android:icon="@drawable/ic_guide"
+        android:title="@string/guide" />
 </menu>

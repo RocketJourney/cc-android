@@ -60,4 +60,5 @@
     <string name="link_copied">Link Copiado</string>
     <string name="done_terminar">Terminar</string>
     <string name="user_checked_in_at">%s hizo check-in por primera vez en %s</string>
+    <string name="guide">Guía</string>
 </resources>
