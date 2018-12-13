@@ -74,6 +74,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         user = SessionManager.getCurrentSession()
 
         println(user)
+//        println("mostrar token: ${user?.token}")
 
         setSupportActionBar(componentToolbar.toolbar)
         Utils.hideToolbarTitle(supportActionBar)

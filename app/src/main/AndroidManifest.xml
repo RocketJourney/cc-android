@@ -12,20 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/RocketJourneyTheme">
+
         <activity
             android:name=".LaunchActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Branch URI scheme -->
+            <!-- Branch URI Scheme -->
             <intent-filter>
-                <data android:scheme="controlcenter" />
-
+                <data android:scheme="controlcenter://" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -35,18 +34,37 @@
             <!-- Branch App Links (optional) -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="nmd7.test-app.link"
+                    android:host="nmd7.app.link"
                     android:scheme="https" />
                 <data
-                    android:host="nmd7-alternate.test-app.link"
+                    android:host="nmd7-alternate.app.link"
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <!-- Branch init -->
+        <meta-data
+            android:name="io.branch.sdk.BranchKey"
+            android:value="key_live_nmMbdOJQ6vaNCuINlLzydjaozEgao9hk" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey.test"
+            android:value="key_test_dgHkkQOP1ChLBrQKaJqzybcfADolg5nt" />
+        <meta-data
+            android:name="io.branch.sdk.TestMode"
+            android:value="false" />
+
+        <!-- Branch install referrer tracking (optional) -->
+        <receiver
+            android:name="io.branch.referral.InstallListener"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <service android:name=".structure.notifications.FirebasePushNotifications">
             <intent-filter>
@@ -64,29 +82,6 @@
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
-
-
-        <!-- Branch init -->
-        <meta-data
-            android:name="io.branch.sdk.BranchKey"
-            android:value="key_live_nmMbdOJQ6vaNCuINlLzydjaozEgao9hk" />
-        <meta-data
-            android:name="io.branch.sdk.BranchKey.test"
-            android:value="key_test_dgHkkQOP1ChLBrQKaJqzybcfADolg5nt" />
-
-        <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
-        <meta-data
-            android:name="io.branch.sdk.TestMode"
-            android:value="true" />
-
-        <!-- Branch install referrer tracking -->
-        <receiver
-            android:name="io.branch.referral.InstallListener"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".login.FirstScreenActivity"
