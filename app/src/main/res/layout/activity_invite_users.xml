@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/black_21"
     android:orientation="vertical"
-    tools:context="com.rocketjourney.controlcenterrocketjourney.home.InviteUsersActivity">
+    tools:context="com.rocketjourney.controlcenterrocketjourney.home.SelectSpotsInviteActivity">
 
     <include
         android:id="@+id/componentToolbar"

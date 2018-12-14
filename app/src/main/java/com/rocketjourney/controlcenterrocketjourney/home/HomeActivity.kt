@@ -163,7 +163,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.SPOT, spot, false))
         }
 
-        val intent = Intent(this@HomeActivity, InviteUsersActivity::class.java)
+        val intent = Intent(this@HomeActivity, SelectSpotsInviteActivity::class.java)
         intent.putExtra(SERIALIZABLE_EXTRA_SPOTS, spotsStructure)
         intent.putExtra(SERIALIZABLE_EXTRA_CLUB, clubInfo)
         startActivity(intent)

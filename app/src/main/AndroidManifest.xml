@@ -17,6 +17,7 @@
             android:name=".LaunchActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -108,7 +109,7 @@
             android:name=".structure.views.WebViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.InviteUsersActivity"
+            android:name=".home.SelectSpotsInviteActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".home.SendInviteLinkActivity"></activity>
     </application>

@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.HomeActivity
+import com.rocketjourney.controlcenterrocketjourney.home.interfaces.OnEnableNextButtonInterface
 import com.rocketjourney.controlcenterrocketjourney.home.objects.SpotStructure
 import kotlinx.android.synthetic.main.item_invite_spot_check_box.view.*
 
-class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStructure>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStructure>, val context: Context, val enableNextButton: OnEnableNextButtonInterface) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val TYPE_DESCRIPTION = 0
@@ -85,6 +86,12 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
 
                     }
 
+                    if (isChecked) {
+                        enableNextButton.enableNextButton(isChecked)
+                    } else {
+                        enableNextButton.enableNextButton(isSomeSpotEnabled())
+                    }
+
                 }
             })
 
@@ -92,6 +99,13 @@ class SpotsInviteUsersRecyclerViewAdapter(private val spots: ArrayList<SpotStruc
 
         views.add(view)
 
+    }
+
+    private fun isSomeSpotEnabled(): Boolean {
+        spots.forEach {
+            if (it.checked) return true
+        }
+        return false
     }
 
     fun getSelectedSpotsId(): ArrayList<Int> {
