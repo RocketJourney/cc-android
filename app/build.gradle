@@ -9,7 +9,7 @@ android {
         applicationId "com.rocketjourney.controlcenterrocketjourney"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 4
+        versionCode 5
         versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
