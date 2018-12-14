@@ -23,7 +23,7 @@ class SendInviteLinkActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_invite_link)
 
-        link = intent.getStringExtra(InviteUsersActivity.EXTRA_INVITE_LINK)
+        link = intent.getStringExtra(SelectSpotsInviteActivity.EXTRA_INVITE_LINK)
 
         setSupportActionBar(componentToolbar.toolbar)
         Utils.hideToolbarTitle(supportActionBar)
