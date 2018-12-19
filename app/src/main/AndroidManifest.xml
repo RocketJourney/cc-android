@@ -112,6 +112,9 @@
             android:name=".home.SelectSpotsInviteActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".home.SendInviteLinkActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="8701a191e31c3f731cf2322edd4924f1b38ed417" />
     </application>
 
 </manifest>

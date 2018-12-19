@@ -19,6 +19,7 @@ import com.rocketjourney.controlcenterrocketjourney.login.responses.LoginRespons
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.component_toolbar_title.view.*
 import retrofit2.Call
@@ -111,6 +112,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                             startActivity(intent)
 
                         } else {
+
+                            Realm.getDefaultInstance().executeTransaction {
+                                user.currentClub = user.clubs[0]
+                                it.insertOrUpdate(user)
+                            }
 
                             val intent = Intent(applicationContext, HomeActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
