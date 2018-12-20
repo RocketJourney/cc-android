@@ -3,13 +3,16 @@ package com.rocketjourney.controlcenterrocketjourney.structure;
 import android.app.Application;
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
+
 import io.branch.referral.Branch;
+import io.fabric.sdk.android.Fabric;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmMigration;
 
-public class RocketJourneyApp extends Application {
+public class RJControlCenter extends Application {
 
     public static final String ROCKETJOURNEYCC_REALM = "rocketjourneycc.realm";
     public static Context context;
@@ -17,6 +20,7 @@ public class RocketJourneyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         context = getApplicationContext();
 
         Realm.init(this);

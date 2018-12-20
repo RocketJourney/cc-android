@@ -3,7 +3,9 @@ package com.rocketjourney.controlcenterrocketjourney.home.objects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AccesibleSpot {
+import java.io.Serializable;
+
+public class AccesibleSpot implements Serializable {
 
     @SerializedName("name")
     @Expose
@@ -23,13 +25,11 @@ public class AccesibleSpot {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public AccesibleSpot() {
     }
 
     /**
-     *
      * @param id
      * @param clubId
      * @param badgeUrl

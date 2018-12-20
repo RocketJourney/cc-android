@@ -10,13 +10,18 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import com.rocketjourney.controlcenterrocketjourney.R
 import com.rocketjourney.controlcenterrocketjourney.home.fragments.ClubDashboardFragment
+import com.rocketjourney.controlcenterrocketjourney.home.fragments.InstructionsFragment
 import com.rocketjourney.controlcenterrocketjourney.home.fragments.SpotUsersFragment
 import com.rocketjourney.controlcenterrocketjourney.home.interfaces.HomeInterface
 import com.rocketjourney.controlcenterrocketjourney.home.objects.AccesibleSpot
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubData
 import com.rocketjourney.controlcenterrocketjourney.home.objects.ClubInfo
+import com.rocketjourney.controlcenterrocketjourney.home.objects.SpotStructure
+import com.rocketjourney.controlcenterrocketjourney.home.requests.PushNotificationsRequest
 import com.rocketjourney.controlcenterrocketjourney.home.responses.ClubDataResponse
 import com.rocketjourney.controlcenterrocketjourney.structure.managers.SessionManager
 import com.rocketjourney.controlcenterrocketjourney.structure.network.RJRetrofit
@@ -37,9 +42,15 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         private const val OWNER = "owner"
         const val ALL_SPOTS = "all_spots"
         const val SOME_SPOTS = "some_spots"
+
+        const val ANDROID = "android"
+
+        const val SERIALIZABLE_EXTRA_SPOTS = "SERIALIZABLE_EXTRA_SPOTS"
+        const val SERIALIZABLE_EXTRA_CLUB = "SERIALIZABLE_EXTRA_CLUB"
     }
 
-    var user: User? = null
+    private var user: User? = null
+    private var permissions = ""
 
     lateinit var textViewUserName: TextView
     lateinit var textViewClubName: TextView
@@ -52,6 +63,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private var lastMenuSelected: MenuItem? = null
     private var currentFragment: Fragment? = null
 
+    var instructionsFragment: InstructionsFragment? = null
     lateinit var dashboardFragment: ClubDashboardFragment
     var spotUsersFragment: SpotUsersFragment? = null
 
@@ -60,6 +72,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_home)
 
         user = SessionManager.getCurrentSession()
+
+        println(user)
+//        println("mostrar token: ${user?.token}")
 
         setSupportActionBar(componentToolbar.toolbar)
         Utils.hideToolbarTitle(supportActionBar)
@@ -70,6 +85,45 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         initLeftDrawer()
         fillLeftDrawerInfo()
         initBottomNavigation()
+        registerPushNotifications()
+    }
+
+    private fun registerPushNotifications() {
+        val pushNotifsAreAlreadyRegistered = Utils.getBooleanFromPrefs(applicationContext, Utils.SHARED_PREFERENCES_PUSH_NOTIFICATIONS_ARE_REGISTERED, false)
+
+        if (!pushNotifsAreAlreadyRegistered) {
+
+            FirebaseMessaging.getInstance().isAutoInitEnabled = true
+
+            FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+                val request = PushNotificationsRequest()
+
+                request.device = ANDROID
+                request.deviceToken = it.token
+
+                RJRetrofit.getInstance().create(HomeInterface::class.java).registerPushNotifications(user!!.token, request)
+                        .enqueue(object : Callback<Void> {
+
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+
+                                when (response.code()) {
+
+                                    201 -> {
+                                        Utils.saveBooleanToPrefs(applicationContext, Utils.SHARED_PREFERENCES_PUSH_NOTIFICATIONS_ARE_REGISTERED, true)
+                                    }
+
+                                }
+
+                            }
+
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                                //ward
+                            }
+                        })
+            }
+
+        }
 
     }
 
@@ -89,11 +143,32 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         when (v) {
 
             imageButtonAddUser -> {
-//                Utils.showShortToast("Create invite")
+                launchInviteActivity()
             }
 
         }
 
+    }
+
+    private fun launchInviteActivity() {
+
+        val spotsStructure = ArrayList<SpotStructure>()
+
+        spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.DESCRIPTION, null, false))
+
+        if (permissions == ALL_SPOTS || permissions == OWNER)
+            spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.ALL_SPOTS, null, false))
+
+        for (spot in spots) {
+            spotsStructure.add(SpotStructure(SpotStructure.SpotItemType.SPOT, spot, false))
+        }
+
+        val intent = Intent(this@HomeActivity, SelectSpotsInviteActivity::class.java)
+        intent.putExtra(SERIALIZABLE_EXTRA_SPOTS, spotsStructure)
+        intent.putExtra(SERIALIZABLE_EXTRA_CLUB, clubInfo)
+        startActivity(intent)
+
+        overridePendingTransition(R.anim.anim_bottom_to_center, R.anim.anim_fade_out)
     }
 
     private fun initBottomNavigation() {
@@ -117,15 +192,25 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     R.id.menuUsers -> {
 
                         if (spotUsersFragment == null) {
-
                             spotUsersFragment = SpotUsersFragment.newInstance(clubInfo.id, currentSpotId)
-
                         }
 
                         if (currentFragment !is SpotUsersFragment) {
                             spotUsersFragment!!.updateSpotUsersData(clubInfo.id, currentSpotId)
                             setFragment(spotUsersFragment!!)
 
+                        }
+
+                    }
+
+                    R.id.menuGuide -> {
+
+                        if (instructionsFragment == null) {
+                            instructionsFragment = InstructionsFragment()
+                        }
+
+                        if (currentFragment !is InstructionsFragment) {
+                            setFragment(instructionsFragment!!)
                         }
 
                     }
@@ -248,7 +333,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     spotUsersFragment?.updateUsersList(clubInfo.id, currentSpotId, SpotUsersFragment.SET_USERS)
 
                 }
-                
+
             }
 
         }
@@ -277,13 +362,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                         .transform(RoundCornersTransform(Utils.ROUND_CORNERS_CLUBS_RECYCLER_VIEW, 0, true, true))
                         .fit().centerCrop().into(componentToolbar.imageViewToolbarLogo)
 
-                val permissions = data.user?.permission
-
-                if (permissions == OWNER) {
-                    imageButtonAddUser.visibility = View.VISIBLE
-                } else {
-                    imageButtonAddUser.visibility = View.GONE
-                }
+                permissions = data.user?.permission!!
 
                 textViewUserName.text = "${data.user.firstName} ${data.user.lastName}"
 

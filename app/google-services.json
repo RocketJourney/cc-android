@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "495281055978",
+    "firebase_url": "https://controlcenter-e7f69.firebaseio.com",
+    "project_id": "controlcenter-e7f69",
+    "storage_bucket": "controlcenter-e7f69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495281055978:android:f8b10922107662a4",
+        "android_client_info": {
+          "package_name": "com.rocketjourney.controlcenterrocketjourney"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495281055978-dpmsgni8ausrm5fae9rc0fdlv8f955c5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeINx3_AJq4Pywzb2uTlqkDkOlRuJwDPE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

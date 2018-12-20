@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_21"
+    android:orientation="vertical"
+    tools:context="com.rocketjourney.controlcenterrocketjourney.home.SendInviteLinkActivity">
+
+    <include
+        android:id="@+id/componentToolbar"
+        layout="@layout/component_toolbar_title" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutSendLinkToFriend"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_send_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:fontFamily="@font/montserratregular"
+            android:text="@string/send_link_to_colleague_s_via"
+            android:textColor="@color/gray_ea"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/gray_2e" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutCopyLinkToClipboard"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_copy_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:fontFamily="@font/montserratregular"
+            android:text="@string/copy_link"
+            android:textColor="@color/gray_ea"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/gray_2e" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/this_link_will_be_valid_for_7_days_and_it_can_be_used_by_several_colleagues"
+        android:textColor="@color/gray_9a"
+        android:textSize="15sp" />
+</LinearLayout>

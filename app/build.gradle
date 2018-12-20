@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -9,8 +24,8 @@ android {
         applicationId "com.rocketjourney.controlcenterrocketjourney"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.0"
+        versionCode 6
+        versionName "1.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,23 +40,19 @@ android {
     }
 
     flavorDimensions "version"
-    productFlavors {
-        production {
-            // Assigns this product flavor to the "version" flavor dimension.
-            // This property is optional if you are using only one dimension.
-            dimension "version"
-            applicationIdSuffix ".production"
-            versionNameSuffix "-production"
 
-            buildConfigField "String", "ApiUrl", "\"https://rocket-api.com/api/v2/\""
-        }
+    productFlavors {
+
         development {
             dimension "version"
-            applicationIdSuffix ".development"
-            versionNameSuffix "-development"
-
             buildConfigField "String", "ApiUrl", "\"https://api.testin.space/api/v2/\""
         }
+
+        production {
+            dimension "version"
+            buildConfigField "String", "ApiUrl", "\"https://rocket-api.com/api/v2/\""
+        }
+
     }
 }
 
@@ -56,7 +67,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-
     implementation 'io.branch.sdk.android:library:3.+'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
 }
+
+apply plugin: 'com.google.gms.google-services'

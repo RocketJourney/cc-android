@@ -50,6 +50,12 @@ class LaunchActivity : AppCompatActivity() {
                 if (error == null) {
 
                     val jsonBranch = JSONObject(referringParams.toString())
+
+                    if (!jsonBranch.has("+clicked_branch_link")) {
+                        launchWithSessionValidation()
+                        return
+                    }
+
                     val openWithDeepLink = jsonBranch.getBoolean("+clicked_branch_link")
 
                     if (openWithDeepLink) {

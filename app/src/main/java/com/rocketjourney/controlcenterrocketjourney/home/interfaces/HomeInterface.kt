@@ -1,6 +1,9 @@
 package com.rocketjourney.controlcenterrocketjourney.home.interfaces
 
+import com.rocketjourney.controlcenterrocketjourney.home.requests.InviteRequest
+import com.rocketjourney.controlcenterrocketjourney.home.requests.PushNotificationsRequest
 import com.rocketjourney.controlcenterrocketjourney.home.responses.ClubDataResponse
+import com.rocketjourney.controlcenterrocketjourney.home.responses.InviteResponse
 import com.rocketjourney.controlcenterrocketjourney.home.responses.SpotStatusResponse
 import com.rocketjourney.controlcenterrocketjourney.home.responses.SpotUsersResponse
 import retrofit2.Call
@@ -23,4 +26,12 @@ interface HomeInterface {
     @GET("clubs/{clubId}/spots/{spotId}/users")
     fun getSpotUsers(@Header("Authorization") token: String, @Path("clubId") clubId: Int?,
                       @Path("spotId") spotIdOrAllSpots: String?, @Query("page") page: Int): Call<SpotUsersResponse>
+
+    @Headers("Content-Type: application/json", "Accept-Language: en")
+    @POST("invites/")
+    fun createInviteRequest(@Header("Authorization") token: String, @Body request: InviteRequest): Call<InviteResponse>
+
+    @Headers("Content-Type: application/json", "Accept-Language: en")
+    @POST("push-notifications/register")
+    fun registerPushNotifications(@Header("Authorization") token: String, @Body request: PushNotificationsRequest): Call<Void>
 }

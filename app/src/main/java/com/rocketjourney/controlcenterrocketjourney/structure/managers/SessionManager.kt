@@ -1,8 +1,10 @@
 package com.rocketjourney.controlcenterrocketjourney.structure.managers
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import com.rocketjourney.controlcenterrocketjourney.login.FirstScreenActivity
 import com.rocketjourney.controlcenterrocketjourney.login.objects.SignUpResponseData
 import com.rocketjourney.controlcenterrocketjourney.structure.network.utils.Utils
@@ -42,16 +44,27 @@ class SessionManager {
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction { realm.deleteAll() }
             Utils.cleanSharedPreferences(context)
+            FirebaseMessaging.getInstance().isAutoInitEnabled = false
+            DeleteFirebaseToken().execute()
 
             val intent = Intent(context, FirstScreenActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
 
-        fun closeSession(context: Context){
+        fun closeSession(context: Context) {
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction { realm.deleteAll() }
             Utils.cleanSharedPreferences(context)
+        }
+
+        private class DeleteFirebaseToken : AsyncTask<Void, Void, String>() {
+
+            override fun doInBackground(vararg params: Void?): String {
+                FirebaseInstanceId.getInstance().deleteInstanceId()
+                return ""
+            }
+
         }
     }
 

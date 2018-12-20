@@ -5,27 +5,27 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".structure.RocketJourneyApp"
+        android:name=".structure.RJControlCenter"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/RocketJourneyTheme">
+
         <activity
             android:name=".LaunchActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Branch URI scheme -->
+            <!-- Branch URI Scheme -->
             <intent-filter>
-                <data android:scheme="controlcenter" />
-
+                <data android:scheme="controlcenter://" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -35,15 +35,14 @@
             <!-- Branch App Links (optional) -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="nmd7.test-app.link"
+                    android:host="nmd7.app.link"
                     android:scheme="https" />
                 <data
-                    android:host="nmd7-alternate.test-app.link"
+                    android:host="nmd7-alternate.app.link"
                     android:scheme="https" />
             </intent-filter>
         </activity>
@@ -55,13 +54,11 @@
         <meta-data
             android:name="io.branch.sdk.BranchKey.test"
             android:value="key_test_dgHkkQOP1ChLBrQKaJqzybcfADolg5nt" />
-
-        <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
         <meta-data
             android:name="io.branch.sdk.TestMode"
-            android:value="true" />
+            android:value="false" />
 
-        <!-- Branch install referrer tracking -->
+        <!-- Branch install referrer tracking (optional) -->
         <receiver
             android:name="io.branch.referral.InstallListener"
             android:exported="true">
@@ -69,6 +66,23 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
+        <service android:name=".structure.notifications.FirebasePushNotifications">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
 
         <activity
             android:name=".login.FirstScreenActivity"
@@ -94,6 +108,13 @@
         <activity
             android:name=".structure.views.WebViewActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.SelectSpotsInviteActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".home.SendInviteLinkActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="8701a191e31c3f731cf2322edd4924f1b38ed417" />
     </application>
 
 </manifest>
